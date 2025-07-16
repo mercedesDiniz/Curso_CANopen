@@ -1,0 +1,51 @@
+# Ignorar arquivos binários e de build
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.axf
+*.d
+*.out
+*.srec
+
+# Ignorar pastas de build e compilação
+/Debug/
+/Release/
+/build/
+/out/
+.settings/
+
+# Ignorar pastas de administração
+/adm/
+
+# Ignorar arquivos de dependência do compilador
+*.d
+*.dep
+
+# Ignorar arquivos temporários do IDE
+*.bak
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Ignorar arquivos de configuração do GDB e depuração
+*.launch
+*.jlink
+*.uvoptx
+*.uvprojx
+
+# Ignorar arquivos gerados automaticamente pelo STM32CubeMX
+*.ioc-backup
+/MX_*/  # Diretórios temporários do STM32CubeMX
+
+# Ignorar arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar configurações locais do Git e do VS Code
+#.gitignore
+.vscode/
+
