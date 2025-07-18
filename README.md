@@ -23,6 +23,7 @@ Minhas anotações e atividades do treinamento do professor Rodrigo Moreira Borg
 - Referencias:
     - [CAN: From physical layer to application layer and beyond](https://www.can-cia.org/can-knowledge)
     - [CAN Bus Explained - A Simple Intro [2025]](https://www.csselectronics.com/pages/can-bus-simple-intro-tutorial)
+    - [Application Report - Texas Instruments - Introduction to the Controller Area Network (CAN) [2016]](https://www.ti.com/lit/an/sloa101b/sloa101b.pdf?ts=1750050977741&ref_url=https%253A%252F%252Fwww.google.com%252F)
     - [CANopen Explained - A Simple Intro [2025]](https://www.csselectronics.com/pages/canopen-tutorial-simple-intro)
     - [WEG - Manual da Comunicação CANopen](https://static.weg.net/medias/downloadcenter/h2f/h1a/WEG-cfw11-manual-da-comunicacao-canopen-plc11-10002134020-manual-portugues-br.pdf)
 
@@ -95,13 +96,13 @@ Pode-se visualizar o CAN a partir de um modelo OSI de 7 camadas, conforme ilustr
 
 ![alt text](docs/imgs/layers_can.png)
 
-A camada física (ISO 11898-2) do barramento CAN define tipos de cabos, níveis de sinais elétricos, requisitos de nós, impedância de cabos etc. Por exemplo, a camada física especifica abaixo:
+A camada física ([ISO 11898-2](https://www.iso.org/obp/ui/en/#iso:std:iso:11898:-2:ed-3:v1:en)) do barramento CAN define tipos de cabos, níveis de sinais elétricos, requisitos de nós, impedância de cabos etc. Por exemplo, a camada física especifica abaixo:
 
 - Taxa de transmissão: os nós devem ser conectados por meio de um barramento de dois fios com taxas de transmissão de até 1 Mbit/s (CAN clássico) ou 8 Mbit/s (CAN FD).
 - Comprimento do cabo: o comprimento máximo do cabo CAN deve estar entre 500 metros (125 kbit/s) e 40 metros (1 Mbit/s).
 - Terminação: O barramento CAN deve ser terminado usando um resistor de terminação de 120 Ohm em cada extremidade do barramento.
 
-A camada de enlace de dados (ISO 11898-1) do barramento CAN define, por exemplo, formatos de quadros CAN, tratamento de erros, transmissão de dados e ajuda a garantir a integridade dos dados. Por exemplo, a camada de enlace de dados especifica:
+A camada de enlace de dados ([ISO 11898-1](https://www.iso.org/obp/ui/en/#iso:std:iso:11898:-1:ed-3:v1:en)) do barramento CAN define, por exemplo, formatos de quadros CAN, tratamento de erros, transmissão de dados e ajuda a garantir a integridade dos dados. Por exemplo, a camada de enlace de dados especifica:
 
 - Formatos de quadro: Quatro tipos (quadros de dados, quadros remotos, quadros de erro, quadros de sobrecarga) e identificadores de 11 bits/29 bits
 - Tratamento de erros: métodos para detecção/tratamento de erros CAN, incluindo CRC, slots de reconhecimento, contadores de erros e muito mais.
@@ -152,6 +153,38 @@ A camada de enlace de dados (ISO 11898-1) do barramento CAN define, por exemplo,
 |20|3300|
 |10|6700|
 |5|10000|
+
+**Frames**
+
+De acordo com a camada de enlace de dados, a comunicação pelo barramento CAN é feita por meio de frames CAN.
+
+![alt text](docs/imgs/data_frame_can.png)
+
+- **Campos do Frame:**
+    - **Start of Frame (SOF)**: Indica o início do frame com um bit "0 dominante", e é utilizado para sincronizar os nós sob o barramento após ele estar ocioso.
+    - **Identifier (ID)**: É o identificador do frame - valores mais baixos têm prioridade mais alta. Pode ter 11 bits (CAN 1.0 e o CAN 2.0A) ou 29 bits (CAN 2.0B).
+    - **Remote Transmission Request (RTR)**: Indica se um nó envia dados ou solicita dados dedicados de outro nó. Se definido como "0 dominante" é um *data frame*, se definido como "1 recessivo" é um *remote frame*.
+    - **Substitute Remote Request (SRR)**: Nos frames extended (CAN 2.0B), substitui o bit RTR no local da mensagem padrão.
+    - **Controle**: O contém o  *Identifier Extension Bit* (IDE), que é um "0 dominante" para indicar frames de 11 bits, e "1 recessivo" para indicar frames de 29 bits. Ele também contém o *Data Length Code* (DLC) de 4 bits, que especifica o comprimento dos bytes de dados a serem transmitidos.
+    - **Dados**: Os dados contêm os bytes de dados, também conhecidos como carga útil, que incluem sinais CAN que podem ser decodificados para obter informações.
+    - **Cyclic Redundancy Check (CRC)**: Verificação de erro.
+    - **Acknowledgement (ACK)**: A confirmação de recepção, trata-se de um bit sobrescrito pelos receptores como "0 dominante", caso não haja erros.
+    - **End of Frame (EOF)**: Indica o encerramento do frame, com 7 bits "1 recessivos", e desabilita o *bit stuffing*.
+    - **Inter-Frame Space (IFS)**: É o espaço entre frames, sendo 7 bits que contém a quantidade de tempo requerido para move um frame.
+
+- **Tipos de Frame:**
+    - **Data frame**: transporta dados de um nó CAN emissor para um ou mais nós receptores.
+    - **Error frame**: usado por um nó CAN para indicar a detecção de um erro de comunicação e contém um sinalizador de erro e um delimitador de erro.
+    - **Remote frame**: pode ser usado para solicitar determinados dados de um nó CAN e é semelhante ao quadro de dados, exceto pela ausência de um campo de dados e pelo campo RTR ser 1 (recessivo).
+    - **Overload frame**: pode ser usado para fornecer atraso adicional entre outros frames CAN, caso alguns nós CAN necessitem de tempo adicional para processamento.
+
+**Sinais Diferenciais**
+
+A transmissão de dados no CAN utiliza sinais diferenciais. Essa técnica melhora significativamente a imunidade a ruído, pois qualquer interferência eletromagnética tende a afetar igualmente ambos os fios, mantendo constante a diferença de potencial entre eles, que é o que carrega a informação no barramento.
+
+![alt text](docs/imgs/sinal_can.png) ![alt text](docs/imgs/sinal_can_2.png)
+
+
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
