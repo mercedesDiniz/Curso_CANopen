@@ -182,6 +182,8 @@ De acordo com a camada de enlace de dados, a comunicação pelo barramento CAN �
 
 A transmissão de dados no CAN utiliza sinais diferenciais. Essa técnica melhora significativamente a imunidade a ruído, pois qualquer interferência eletromagnética tende a afetar igualmente ambos os fios, mantendo constante a diferença de potencial entre eles, que é o que carrega a informação no barramento.
 
+O nível recessivo (1) corresponde a uma diferença de tensão menor que 0,5V entre o CAN_H e o CAN_L. Já o nível dominante (0) é detectado quando a diferenção de tensão for no mínimo 0,9V.
+
 ![alt text](docs/imgs/sinal_can.png) ![alt text](docs/imgs/sinal_can_2.png)
 
 **Verificação e Sinalização de Erros**
@@ -211,6 +213,10 @@ Em uma rede CAN, a prioridade com que uma mensagem é transmitida relativamente 
 Como o protocolo CAN permite o acesso simultâneo ao barramento por diferentes nós, quando mais de um nó acessa o barramento a arbitragem é requerida. O método de solução dos conflitos ao acesso usado é o ***Carrier Sense Multiple Access with Collision Avoidance* (CSMA/CA)**, em que a arbitragem é realizada bit a bit dos identificadores das mensagens. Cada nó observa a rede bit a bit utilizando o mecanismo *bitwise*, em que o estado dominante (0) se sobrepõe ao recessivo (1). Todos os nós que perdem a arbitragem tornam-se imediatamente receptores, e não fazem mais nenhuma tentativa enquanto a rede não estiver livre.
 
 ![alt text](docs/imgs/exemplo_arbitragem_can.png)
+
+**Filtragem**
+
+A maioria dos controladores CAN oferecem um serviço de filtragem de mensagens. O mesmo faz com que somente mensagens co o padrão de identificação pré-programado sejam armazenadas e sinalizadas no microcontrolador. Isso possibilita uma economia de tempo de leitura e processamento das mensagens recebidas. Essa operação normalmente envolve a configuração de duas máscaras para o identificador, de forma a selecionar as mensagens ou grupos de mensagens desejadas e descartar as não desejadas. 
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
