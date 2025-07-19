@@ -184,7 +184,25 @@ A transmissão de dados no CAN utiliza sinais diferenciais. Essa técnica melhor
 
 ![alt text](docs/imgs/sinal_can.png) ![alt text](docs/imgs/sinal_can_2.png)
 
+**Verificação e Sinalização de Erros**
 
+O protocolo CAN possui algumas formas de identificar erros, senso as principais:
+
+- **Bit Stuffing**: Técnica preventiva aplicada apenas nos *data frames* e *remote frames*, na qual após cada conjunto de **5 bits iguais consecutivos** é inserido um bit *stuffing*. Os campos ACK e EOF não passam por essa técnica. O controlador do receptor remove os bits *stuffing*.
+
+- **Cyclic Redundancy Check (CRC)**: Antes da transmissão de um *data frame* seu CRC é calculado e inserido no campo CRC. Na recepção desse frame, o cálculo é refeito (a parti do campo SOF até o EOF) e comparado com o valor do campo CRC do frame, e em caso de erro um *error frame* é transmitido.
+
+    - [Calculadora de CRC Online](https://emn178.github.io/online-tools/crc/)
+
+- **Acknowledgement (ACK)** : Uma transmissor, ao enviar uma mensagem CAN, envia no campo ACK bits recessivos (1). No receptor, ao receber essas mensagens, ele retorna esses campo tendo bits dominantes (0) para indicar que a mensagem foi recebida com sucesso.  
+
+- **Contadores de Erro**: São definidos os contadores **TXECTR** (contador de erros de transmissão) e **RXCTR** (contadores de erros de recepção), que determinam os estados de erro de cada nó, podendo ser erro passivo ou ativo.
+
+    - **Erro passivo**: representa o estado normal de um nós, podendo transmitir ou receber mensagens, mas o flag de erro passivo é enviado. Há um limite de falhas que podem ser aceitas de um dispositivos (TXECTR e RXCTR $\leq$ 127 erros), e caso a mesma seja ultrapassada este passa a ser um erro ativo.  
+
+    - **Erro ativo**: indica que o nó está com erros frequentes, e nesse caso flags de erro ativo são enviados. Isso possibilita impedir que nós com erro frequentes utilizem o barramento. 
+
+- **Barramento Off**: Se um nó atinge 255 erros (no TXECTR e RXCTR), o mesmo é desconectado do barramento e somente será iniciado por um reset.
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
