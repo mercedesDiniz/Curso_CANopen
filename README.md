@@ -204,6 +204,14 @@ O protocolo CAN possui algumas formas de identificar erros, senso as principais:
 
 - **Barramento Off**: Se um nó atinge 255 erros (no TXECTR e RXCTR), o mesmo é desconectado do barramento e somente será iniciado por um reset.
 
+**Processo de Arbitragem**
+
+Em uma rede CAN, a prioridade com que uma mensagem é transmitida relativamente à outra é especificada pelos seu identificadores. A prioridade das mensagens são definidas durante a fase de projeto do sistema na forma de valores binários. Nesta definição de prioridades é considerado que o **identificador de menor valor numérico detém maior prioridade**.
+
+Como o protocolo CAN permite o acesso simultâneo ao barramento por diferentes nós, quando mais de um nó acessa o barramento a arbitragem é requerida. O método de solução dos conflitos ao acesso usado é o ***Carrier Sense Multiple Access with Collision Avoidance* (CSMA/CA)**, em que a arbitragem é realizada bit a bit dos identificadores das mensagens. Cada nó observa a rede bit a bit utilizando o mecanismo *bitwise*, em que o estado dominante (0) se sobrepõe ao recessivo (1). Todos os nós que perdem a arbitragem tornam-se imediatamente receptores, e não fazem mais nenhuma tentativa enquanto a rede não estiver livre.
+
+![alt text](docs/imgs/exemplo_arbitragem_can.png)
+
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
