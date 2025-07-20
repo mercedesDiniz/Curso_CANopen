@@ -216,7 +216,26 @@ Como o protocolo CAN permite o acesso simultâneo ao barramento por diferentes n
 
 **Filtragem**
 
-A maioria dos controladores CAN oferecem um serviço de filtragem de mensagens. O mesmo faz com que somente mensagens co o padrão de identificação pré-programado sejam armazenadas e sinalizadas no microcontrolador. Isso possibilita uma economia de tempo de leitura e processamento das mensagens recebidas. Essa operação normalmente envolve a configuração de duas máscaras para o identificador, de forma a selecionar as mensagens ou grupos de mensagens desejadas e descartar as não desejadas. 
+A maioria dos controladores CAN oferecem um serviço de filtragem de mensagens. O mesmo faz com que somente mensagens co o padrão de identificação pré-programado sejam armazenadas e sinalizadas no microcontrolador. Isso possibilita uma economia de tempo de leitura e processamento das mensagens recebidas. Essa operação normalmente envolve a configuração de duas máscaras para o identificador, de forma a selecionar as mensagens ou grupos de mensagens desejadas e descartar as não desejadas.
+
+**Barramento Físico, Terminação e Conectores**
+
+O barramento CAN é formado por um cabo de par trançado havendo o baseado em 2 e 4 fios, e os mesmos trabalham com os sinais de dados CAN_H e CAN_L. No caso dos barramentos com 4 fios, além dos sinais de dados, um fio com  Vcc (alimentação) e outro com o GND (referencia) fazem parte do barramento, levando a alimentação às duas terminações ativas da rede.
+
+![alt text](docs/imgs/barramento_can.png)
+
+Entre os tipos de terminação, temos: 
+- **Terminação Básica**: um resistor de 120 $\Omega$ em cada terminação.
+
+- **Terminação com Filtragem**: um capacitor entre dois resistores de 60 $\Omega$ em cada terminação. Com isso temos um filtra passa-baixa para reduzir picos de alta frequência. Um capacitor de 4,7nF gera uma atenuação de -3dB a uma frequência de 1,1Mbps. 
+
+    ![alt text](docs/imgs/terminacao_com_filtragem_can.png)
+
+Para a conexão dos nós ao barramento, a CiA recomenta o utilização do conector padronizado de 9 pinos (DB9):
+
+![alt text](docs/imgs/conector_DB9_can.png)
+
+Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
