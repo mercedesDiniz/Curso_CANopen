@@ -237,6 +237,40 @@ Para a conexão dos nós ao barramento, a CiA recomenta o utilização do conect
 
 Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
+**Práticas**:
+
+1. **Prática CAN 01 (s2a18)**: Comunicação entre dois nós pelo barramento CAN, onde um nó envia um mensagem de 5 bytes (ID `0x12` e os caracteres `h`, `e`, `l`, `l` e `o`) e um mensagem estendida (ID `0xabcdef` e os caracteres `w`, `o`, `r`, `l`, `d`),  e o outro nó apenas recebe e exibe os dados.
+
+    **Materiais**: 
+    - 1 x [Arduino Uno](https://docs.arduino.cc/hardware/uno-rev3/);
+    - 1 x [Arduino Mega](https://docs.arduino.cc/hardware/mega-2560/);
+    - 2 x Módulo CAN BUS MCP2515 TJA1050 (Controlador [MCP2515](https://ww1.microchip.com/downloads/en/DeviceDoc/MCP2515-Stand-Alone-CAN-Controller-with-SPI-20001801J.pdf) e Transceiver [TJA1050](https://hfo.pl/pdf/T/tja1050.pdf)).
+
+        ![alt text](docs/imgs/modulo_can_mcp2515_tja1050.png)
+
+    **Método**:
+    - Utilizar a biblioteca [CAN (by Sandeep Mistry)](https://github.com/sandeepmistry/arduino-CAN) na versão 0.3.1.
+    - Carregar o exemplo `CANSender.ino` no Arduino Uno.
+    - Edite o exemplo `CANReceiver.ino` para `CS` na comunicação SPI ser compatível com a pinagem do Arduino Mega:
+        ~~~c
+        #include <CAN.h>
+        void setup(){
+            CAN.setPins(53); // Define o pino CS
+            // ...
+        }
+        ~~~
+    - Carregar o exemplo `CANReceiver.ino` modificado no Arduino Mega.
+
+    **Implementação**: [projects/pratica_can_01](projects/pratica_can_01).
+
+2. **Prática CAN 02 (s2a19)**
+
+3. **Prática CAN 03 (s2a20)**
+
+4. **Prática CAN 03 (s2a21)**
+
+5. **Prática CAN 03 (s2a22)**
+
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
