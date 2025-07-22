@@ -251,7 +251,7 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
     **Método**:
     - Utilizar a biblioteca [CAN (by Sandeep Mistry)](https://github.com/sandeepmistry/arduino-CAN) na versão 0.3.1.
     - Carregar o exemplo `CANSender.ino` no Arduino Uno.
-    - Edite o exemplo `CANReceiver.ino` para `CS` na comunicação SPI ser compatível com a pinagem do Arduino Mega:
+    - Editar o exemplo `CANReceiver.ino` para `CS` na comunicação SPI ser compatível com a pinagem do Arduino Mega:
         ~~~c
         #include <CAN.h>
         void setup(){
@@ -263,7 +263,18 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
     **Implementação**: [projects/pratica_can_01](projects/pratica_can_01).
 
-2. **Prática CAN 02 (s2a19)**
+2. **Prática CAN 02 (s2a19)**: Enviar do status de uma chave monitorada por um nó sensor para um outro nó, que habilitará um led sinalizador. Aplicação com o uso de filtros.
+
+    **Materiais**: Os materiais da prática 01, mais:
+    - 1 x chave;
+    - 1 x led.
+
+    **Método**:
+    - Utilizar a biblioteca [mcp2515 (by Autowp)](https://github.com/autowp/arduino-mcp2515) na versão 1.2.1.
+    - Carregar o exemplo `CAN_write.ino` no Arduino Uno.
+    - Carregar o exemplo `CAN_read.ino` no Arduino Mega.
+
+    **Implementação**: [projects/pratica_can_02](projects/pratica_can_02)
 
 3. **Prática CAN 03 (s2a20)**
 
