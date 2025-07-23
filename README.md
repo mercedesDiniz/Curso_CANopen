@@ -263,7 +263,7 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
     **Implementação**: [projects/pratica_can_01](projects/pratica_can_01).
 
-2. **Prática CAN 02 (s2a19)**: Enviar do status de uma chave monitorada por um nó sensor para um outro nó, que habilitará um led sinalizador. Aplicação com o uso de filtros.
+2. **Prática CAN 02 (s2a19)**: Enviar do status de uma chave monitorada por um nó sensor para um outro nó, que habilitará um led sinalizador. Introdução a logica dos filtros.
 
     **Materiais**: Os materiais da prática 01, mais:
     - 1 x chave;
@@ -276,11 +276,22 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
     **Implementação**: [projects/pratica_can_02](projects/pratica_can_02)
 
-3. **Prática CAN 03 (s2a20)**
+3. **Prática CAN 03 (s2a20)**: Enviar informações de sinais analógicos e digitais monitorado por um nó sensor para outro nó, que ligará um cooler  e/ou led. Introdução ao tratamentos dos bytes.
 
-4. **Prática CAN 03 (s2a21)**
+    **Materiais**: Os materiais da prática 02, mais:
+    - 1 x Trimpot;
+    - 1 x Cooler Ventoinha.
 
-5. **Prática CAN 03 (s2a22)**
+    **Método**:
+    - Utilizar a biblioteca [mcp2515 (by Autowp)](https://github.com/autowp/arduino-mcp2515) na versão 1.2.1.
+    - Carregar o exemplo `CAN_write.ino` no Arduino Uno.
+    - Carregar o exemplo `CAN_read.ino` no Arduino Mega.
+
+    **Implementação**: [projects/pratica_can_03](projects/pratica_can_03)
+
+4. **Prática CAN 04 (s2a21)**
+
+5. **Prática CAN 05 (s2a22)**
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
