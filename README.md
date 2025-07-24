@@ -289,7 +289,19 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
     **Implementação**: [projects/pratica_can_03](projects/pratica_can_03)
 
-4. **Prática CAN 04 (s2a21)**
+4. **Prática CAN 04 (s2a21)**: Monitorar o barramento CAN através de um analisador caseiro feito com o Arduino Nano. 
+
+    **Materiais**: 
+    - 1 x [Arduino Nano](https://docs.arduino.cc/hardware/nano).
+    - 1 x Módulo CAN BUS MCP2515 TJA1050
+
+    **Método**:
+    - Baixar e instalar o software [CANHacker](https://www.mictronics.de/projects/usb-can-bus).
+    - Baixar e instalar a [biblioteca MCP2515](https://github.com/autowp/arduino-mcp2515).
+    - Baixar a biblioteca Arduino CAN Hacker pelo [arquivo ZIP](https://github.com/autowp/arduino-canhacker/archive/master.zip) ou seguindo as instruções do repositório [CAN Hacker (by Autowp) ](https://github.com/autowp/arduino-canhacker).
+    - Após a instalação da biblioteca Arduino CAN Hacker, edite no arquivo `CanHacker.h` o valor de `canClock` para `MCP_8MHK` (de acordo as configurações do barramento do projeto).
+    - Carregue o exemplo `usb_cdc.ino` da biblioteca `arduino-canhacker-master` no Arduino Nano.
+    - Teste o analisador nos projetos das praticas anteriores.
 
 5. **Prática CAN 05 (s2a22)**
 
