@@ -305,7 +305,17 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
     **Implementação**: [projects/pratica_can_04](projects/pratica_can_04)
 
-5. **Prática CAN 05 (s2a22)**
+5. **Prática CAN 05 (s2a22)**: Enviar as mensagens recebidas pelo CAN para a plataforma Node-RED. 
+
+    **Materiais**: Os mesmos das práticas anteriores.
+
+    **Método**:
+    - Instale o [Node-RED](https://nodered.org) de acordo com as instruções do [site oficial](https://nodered.org/docs/getting-started/local).
+    -  Rode localmente e acesse a plataforma pelo navegador em `http://localhost:1880`.
+    - Em `Menage palette`, instale `node-red-node-serialport`.
+    - Use as funções `serial in`, `serial out`, `serial request` e `serial control` para interagir com a serial no Arduino.
+    - Click duas vezes nos elementos em blocos referentes as funções anteriores, e em `Properties`defina a porta `COM` do Arduino e o *baud rate* da serial.
+    - Edite as praticas anteriores para deixei na implementação apenas os `Serial.print()` das informações que deseja enviar para a plataforma.  
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
