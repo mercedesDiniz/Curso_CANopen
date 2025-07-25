@@ -303,6 +303,8 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
     - Carregue o exemplo `usb_cdc.ino` da biblioteca `arduino-canhacker-master` no Arduino Nano.
     - Teste o analisador nos projetos das praticas anteriores.
 
+    **Implementação**: [projects/pratica_can_04](projects/pratica_can_04)
+
 5. **Prática CAN 05 (s2a22)**
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
