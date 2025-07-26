@@ -319,6 +319,34 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 
 ### 2. [Fundamentos da rede CANopen](#2-fundamentos-da-rede-canopen)
 
+**Características Gerais**:
+- Suporta ambientes nom níveis de EMI elevador, característica intrínseca de imunidade:
+    - Linha de *graund* (GND) separada;
+    - Sinal com transmissão diferencial;
+    - *Short data frames*.
+
+- Modelo de comunicação adaptável:
+    - Produtor/consumidor;
+    - Peer-to-peer (sem necessidade de sincronização pelo mestre).
+
+- Transmissão de parâmetros e dados de configuração.
+
+- Performance da comunicação:
+    - Tempo de resposta 
+        - <1ms para 256 I/Os (digital)- 1Mbps
+        - 5ms para 128 I/Os (analógico) - 1Mbps
+    - Priorização de mensagens;
+    - Processo de transmissão de dados flexível:
+        - Transmissão somente quando requerido (*change-of-state*);
+        - Base de tempo pode ser definida para cada valor (*cyclic*);
+        - Transmissão simultânea a todos os dispositivos conectados a rede (*broadcast*).
+- Acesso não destrutivo ao barramento (*Non-destructive bus access*):
+    - Mensagens prévias serão sempre transmitidas;
+    - Não perde frames no caso de colisão.
+- Detecção de erro de frame
+    - Permite implementar histórico de erro;
+    - Watchdog monitora a disponibilidade do dispositivo.
+
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
 
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
