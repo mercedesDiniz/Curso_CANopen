@@ -40,10 +40,6 @@ Pode-se visualizar o CANopen a partir de um modelo OSI de 7 camadas, conforme il
 
 O barramento CAN representa as duas camadas mais baixas (física e de enlace de dados). Observe que o protocolo CANopen é frequentemente apresentado de forma ambígua quando se trata das 7 camadas OSI. O padrão oficial CiA 301 simplesmente ilustra o CANopen como abrangendo as 5 camadas acima das camadas física e de enlace de dados – mas sem distinção explícita entre as 5 camadas. Em algumas interpretações, o CANopen é indicado como sendo puramente um protocolo da "camada de aplicação", ou seja, abrangendo apenas a camada 7 do modelo OSI.
 
-O CANopen adiciona uma série de novos conceitos importantes:
-
-![alt text](docs/imgs/intro_principais_conceitos_canopen.png)
-
 **Cronologia**:
 - 1993: Pré-desenvolvimentos do CANOpen no âmbito de um projeto Esprit sob a presidência da Bosch.
 - 1994: Publicação do perfil de comunicação baseado em CAL (*CAN Application Layer*) predecessor CANOpen versão 1.0.
@@ -325,9 +321,7 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
     - Sinal com transmissão diferencial;
     - *Short data frames*.
 
-- Modelo de comunicação adaptável:
-    - Produtor/consumidor;
-    - Peer-to-peer (sem necessidade de sincronização pelo mestre).
+- Modelo de comunicação adaptável;
 
 - Transmissão de parâmetros e dados de configuração.
 
@@ -343,9 +337,25 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 - Acesso não destrutivo ao barramento (*Non-destructive bus access*):
     - Mensagens prévias serão sempre transmitidas;
     - Não perde frames no caso de colisão.
+    
 - Detecção de erro de frame
     - Permite implementar histórico de erro;
     - Watchdog monitora a disponibilidade do dispositivo.
+
+**Principais Conceitos**:
+
+![alt text](docs/imgs/intro_principais_conceitos_canopen.png)
+
+Os mesmos se relacionam da seguinte forma:
+
+![alt text](docs/imgs/relacao_entre_os_conceitos_canopen.png)
+
+- **Modelos Comunicação**;
+- **Protocolo de Comunicação**;
+- **Estados do Dispositivo**;
+- **Objetos Comunicação**;
+- **Folha de Dados Eletrônica**;
+- **Perfis de dispositivo**.
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
 
