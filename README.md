@@ -337,7 +337,7 @@ Além do DB9 podemos encontrar conectores dos tipos RJ10, RJ45, M12 e 5 Mini.
 - Acesso não destrutivo ao barramento (*Non-destructive bus access*):
     - Mensagens prévias serão sempre transmitidas;
     - Não perde frames no caso de colisão.
-    
+
 - Detecção de erro de frame
     - Permite implementar histórico de erro;
     - Watchdog monitora a disponibilidade do dispositivo.
@@ -350,12 +350,54 @@ Os mesmos se relacionam da seguinte forma:
 
 ![alt text](docs/imgs/relacao_entre_os_conceitos_canopen.png)
 
-- **Modelos Comunicação**;
-- **Protocolo de Comunicação**;
-- **Estados do Dispositivo**;
-- **Objetos Comunicação**;
-- **Folha de Dados Eletrônica**;
-- **Perfis de dispositivo**.
+Para entender a comunicação, é útil entender primeiro o frame CANopen:
+- Os identificadores (IDs) dos dispositivos vão de 0 a 127;
+- 127 é um limite lógico;
+- O *transceiver* pode ser um fator limitante; 
+- Não pode haver identificadores duplicados. 
+
+![alt text](docs/imgs/frame_canopen.png)
+
+Os 11-bit do ID são referidos como o **Identificador de Objeto de Comunicação** (COB-ID) e é dividido em duas partes:
+- **Código função**: 4 bits refletem a 'funcionalidade' da mensagem.
+- **ID do nó**: 7 bits refletem o ID do nó (entre 1 e 127).
+
+Além disso, CANopen especifica uma série de **objetos comunicação** que atendam casos de uso diferentes. Cada objeto de comunicação representa uma estrutura pré-definida na comunicação CANopen, incluindo:
+
+-  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do Dicionário de Objeto (OD) de outro nó através do barramento CAN. As solicitações e respostas SDO são enviadas através do protocolo cliente/servidor.
+
+-  **PDO (*Process Data Object*)**: Utilizado para a transferência eficiente de dados operacionais em tempo real, como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente). A comunicação PDO utiliza o protocolo produtor/consumidor.
+
+-  **NMT (*Network Management Objects*)**: Segue o protocolo mestre/escravo. Um mestre NMT controla o estado dos escravos através de comandos NMT, como redefinir um nó ou alterar o seu estado operacional.
+
+- **SYNC (*Synchronization Object*)**: Segue o protocolo produtor/consumidor. Um produtor (geralmente o mestre CANopen) transmite a mensagem SYNC periodicamente, permitindo que os consumidores sincronizem o momento de transmissão de dados, por exemplo, via PDOs.
+
+- **TIME (*Timestamp Object*)**: Também segue o protocolo produtor/consumidor e fornece um relógio em toda a rede.
+
+- **EMCY (*Emergency Object*)**: Segue o protocolo produtor/consumidor e é utilizado quando um dispositivo experiencia um erro fatal, indicando-o ao resto da rede.
+
+- **HEARTBEAT (*Heartbeat Object*)**: Um nó envia periodicamente uma mensagem HEARTBEAT para comunicar o seu estado.
+
+- **USDO (*Universal Service Data Object*)**: Uma adição no CANopen FD, que permite o estabelecimento dinâmico de comunicação cruzada em unicast e broadcast, beneficiando sistemas embarcados que podem ser modificados pelo utilizador em tempo de execução.
+
+**Modelos Comunicação**:
+
+![alt text](docs/imgs/modelos_comunicacao_canopen.png)
+
+- **Mestre/escravo**: Neste modo, um nó atua como mestre (por exemplo, uma interface de controlo), enquanto os outros nós funcionam como escravos (por exemplo, um servomotor).
+    - O mestre é responsável por enviar ou solicitar dados dos escravos.
+    - É tipicamente utilizado para diagnósticos, configuração ou gestão de estados dos nós.
+    - Um exemplo de serviço que utiliza este protocolo é o NMT (*Network Management Objects*), que permite ao mestre controlar o estado dos escravos.
+
+- **Cliente/Servidor**: Um cliente envia um pedido de dados a um servidor, que por sua vez responde com os dados solicitados.
+    - Este modelo é empregado quando, por exemplo, um mestre necessita de dados do Dicionário de Objeto (OD) de um escravo.
+    - A leitura de dados de um servidor é chamada de '*upload*', enquanto a escrita é um '*download*'.
+    - O principal serviço que utiliza este protocolo é o SDO (*Service Data Object*), que permite a leitura e escrita de valores do Dicionário de Objeto de um nó CANopen através do bus CAN.
+
+- **Produtor/Consumidor**: Neste modelo, um nó produtor transmite dados para a rede, e um ou mais nós consumidores recebem e utilizam esses dados.
+    - O produtor pode enviar os dados mediante solicitação (modelo "*pull*") ou sem um pedido específico (modelo "*push*").
+    - Este protocolo é utilizado para a transferência eficiente de dados operacionais em tempo real.
+    - O serviço associado é o PDO (*Process Data Object*), que transporta dados operacionais como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente).
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
 
