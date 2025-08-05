@@ -383,13 +383,23 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
         - ***Reset Communication***: 0x82
 
         ![alt text](docs/imgs/estados_dos_dispositivos_canopen.jpg)
-        
+
     - O segundo byte contém o ID do nó de destino.
 
     - Exemplo de um frame NMT:
 
         ![alt text](docs/imgs/frame_nmt_canopen.png)
-- **SYNC (*Synchronization Object*)**: Segue o protocolo produtor/consumidor. Um produtor (geralmente o mestre CANopen) transmite a mensagem SYNC periodicamente, permitindo que os consumidores sincronizem o momento de transmissão de dados, por exemplo, via PDOs.
+
+- **SYNC (*Synchronization Object*)**: 
+    - Segue o protocolo produtor/consumidor. 
+    - Fornece o mecanismo básico de sincronização da rede.
+    - Um produtor (em geral, o controlador/mestre da rede) transmite o SYNC (**COB-ID 0x80**) periodicamente, sendo este período de transmissão configurável.
+
+        ![alt text](docs/imgs/exemplo_sync_canopen.png)
+
+    - Qualquer dispositivo pode ser o consumidor da mensagem SYNC.
+    - Geralmente é usado para fins de gerenciamento de carga. Em tais casos de uso, os PDOs nos consumidores são acionados pela recepção de um número pré-configurado de SYNCs. 
+    - Por padrão, as mensagens não transportam dados, mas a parti da CiA 301 versão 4.1 podem opcionalmente oferecer um valor de contador SYNC de 1 byte. 
 
 - **TIME (*Timestamp Object*)**: Também segue o protocolo produtor/consumidor e fornece um relógio em toda a rede.
 
