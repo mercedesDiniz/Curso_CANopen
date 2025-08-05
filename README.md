@@ -26,6 +26,7 @@ Minhas anotações e atividades do treinamento do professor Rodrigo Moreira Borg
     - [Application Report - Texas Instruments - Introduction to the Controller Area Network (CAN) [2016]](https://www.ti.com/lit/an/sloa101b/sloa101b.pdf?ts=1750050977741&ref_url=https%253A%252F%252Fwww.google.com%252F)
     - [CANopen Explained - A Simple Intro [2025]](https://www.csselectronics.com/pages/canopen-tutorial-simple-intro)
     - [WEG - Manual da Comunicação CANopen](https://static.weg.net/medias/downloadcenter/h2f/h1a/WEG-cfw11-manual-da-comunicacao-canopen-plc11-10002134020-manual-portugues-br.pdf)
+    - [SIEMENS - CANopen Tutorial - Version 2](https://cache.industry.siemens.com/dl/files/771/109479771/att_993267/v1/109479771_CANopen_Tutorial_V20_en.pdf)
 
 ---
 
@@ -359,10 +360,12 @@ Para entender a comunicação, é útil entender primeiro o frame CANopen:
 ![alt text](docs/imgs/frame_canopen.png)
 
 Os 11-bit do ID são referidos como o **Identificador de Objeto de Comunicação** (COB-ID) e é dividido em duas partes:
-- **Código função**: 4 bits refletem a 'funcionalidade' da mensagem.
-- **ID do nó**: 7 bits refletem o ID do nó (entre 1 e 127).
+- **Fuction Code**: 4 bits refletem a 'funcionalidade' da mensagem.
+- **Node ID**: 7 bits refletem o ID do nó (entre 1 e 127).
 
-Além disso, CANopen especifica uma série de **objetos comunicação** que atendam casos de uso diferentes. Cada objeto de comunicação representa uma estrutura pré-definida na comunicação CANopen, incluindo:
+Além disso, CANopen especifica uma série de ***Communication Object*** que atendam casos de uso diferentes. Cada objeto de comunicação representa uma estrutura pré-definida na comunicação CANopen, incluindo:
+
+![alt text](docs/imgs/exemplos_co_fc_canopen.png)
 
 -  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do Dicionário de Objeto (OD) de outro nó através do barramento CAN. As solicitações e respostas SDO são enviadas através do protocolo cliente/servidor.
 
