@@ -371,8 +371,24 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 
 -  **PDO (*Process Data Object*)**: Utilizado para a transferência eficiente de dados operacionais em tempo real, como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente). A comunicação PDO utiliza o protocolo produtor/consumidor.
 
--  **NMT (*Network Management Objects*)**: Segue o protocolo mestre/escravo. Um mestre NMT controla o estado dos escravos através de comandos NMT, como redefinir um nó ou alterar o seu estado operacional.
+-  **NMT (*Network Management Objects*)**: 
+    - Segue o protocolo mestre/escravo.
+    - Um mestre NMT controla o estado (pré-operacional, operacional e parado) dos escravos através de comandos NMT (iniciar, parar e reiniciar), redefinindo um nó ou alterando o seu estado operacional.
+    - Para alterar o estado, o mestre envia um frame de 2 bytes com **CAN ID 0** (*Function Code*= 0000 e *Node ID*= 0000000 - *broadcast*), e todos os escravos processam esta mensagem. 
+    - O primeiro bytes contém o estado solicitado, podendo este ser:
+        - ***Operational*** : 0x01
+        - ***Stopped***: 0x02
+        - **Pre Operational**: 0x80
+        - ***Reset Application***: 0x81
+        - ***Reset Communication***: 0x82
 
+        ![alt text](docs/imgs/estados_dos_dispositivos_canopen.jpg)
+        
+    - O segundo byte contém o ID do nó de destino.
+
+    - Exemplo de um frame NMT:
+
+        ![alt text](docs/imgs/frame_nmt_canopen.png)
 - **SYNC (*Synchronization Object*)**: Segue o protocolo produtor/consumidor. Um produtor (geralmente o mestre CANopen) transmite a mensagem SYNC periodicamente, permitindo que os consumidores sincronizem o momento de transmissão de dados, por exemplo, via PDOs.
 
 - **TIME (*Timestamp Object*)**: Também segue o protocolo produtor/consumidor e fornece um relógio em toda a rede.
@@ -382,6 +398,10 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 - **HEARTBEAT (*Heartbeat Object*)**: Um nó envia periodicamente uma mensagem HEARTBEAT para comunicar o seu estado.
 
 - **USDO (*Universal Service Data Object*)**: Uma adição no CANopen FD, que permite o estabelecimento dinâmico de comunicação cruzada em unicast e broadcast, beneficiando sistemas embarcados que podem ser modificados pelo utilizador em tempo de execução.
+
+**Estados dos Dispositivos** 
+
+
 
 **Modelos Comunicação**:
 
