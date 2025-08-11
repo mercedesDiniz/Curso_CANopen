@@ -351,6 +351,27 @@ Os mesmos se relacionam da seguinte forma:
 
 ![alt text](docs/imgs/relacao_entre_os_conceitos_canopen.png)
 
+**Modelos Comunicação**:
+
+![alt text](docs/imgs/modelos_comunicacao_canopen.png)
+
+- **Mestre/escravo**: Neste modo, um nó atua como mestre (por exemplo, uma interface de controlo), enquanto os outros nós funcionam como escravos (por exemplo, um servo motor).
+    - O mestre é responsável por enviar ou solicitar dados dos escravos.
+    - É tipicamente utilizado para diagnósticos, configuração ou gestão de estados dos nós.
+    - Um exemplo de serviço que utiliza este protocolo é o NMT (*Network Management Objects*), que permite ao mestre controlar o estado dos escravos.
+
+- **Cliente/Servidor**: Um cliente envia um pedido de dados a um servidor, que por sua vez responde com os dados solicitados.
+    - Este modelo é empregado quando, por exemplo, um mestre necessita de dados do Dicionário de Objeto (OD) de um escravo.
+    - A leitura de dados de um servidor é chamada de '*upload*', enquanto a escrita é um '*download*'.
+    - O principal serviço que utiliza este protocolo é o SDO (*Service Data Object*), que permite a leitura e escrita de valores do Dicionário de Objeto de um nó CANopen através do bus CAN.
+
+- **Produtor/Consumidor**: Neste modelo, um nó produtor transmite dados para a rede, e um ou mais nós consumidores recebem e utilizam esses dados.
+    - O produtor pode enviar os dados mediante solicitação (modelo "*pull*") ou sem um pedido específico (modelo "*push*").
+    - Este protocolo é utilizado para a transferência eficiente de dados operacionais em tempo real.
+    - O serviço associado é o PDO (*Process Data Object*), que transporta dados operacionais como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente).
+
+**Frames e COB-IDs**
+
 Para entender a comunicação, é útil entender primeiro o frame CANopen:
 - Os identificadores (IDs) dos dispositivos vão de 0 a 127;
 - 127 é um limite lógico;
@@ -425,7 +446,17 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
     - Os *jitters* de tempo devem ser considerados, pois atrasos na transmissão podem ocorrer devido a arbitragem.
     - O tempo entre as mensagens de TIME dependem da aplicação, ou seja, é definido pelo produtor. 
 
-- **HEARTBEAT (*Heartbeat Object*)**: Um nó envia periodicamente uma mensagem HEARTBEAT para comunicar o seu estado.
+- **HEARTBEAT (*Heartbeat Object*)**: Um nó envia periodicamente uma mensagem HEARTBEAT para comunicar o seu estado. É usado para verificar se todos os dispositivos da rede tem seu estado NMT como foram configurados.
+
+    ![alt text](docs/imgs/heartbeat_canopem.png)
+
+    - Se o *heartbeat* estiver ativado, o nó envia seu estado NMT para o barramento sem sem solicitação e ciclicamente.
+
+    - Este serviço é ativado definindo o tempo *heartbeat-producer-time* no dicionario de objetos para um valor diferente de zero. Como regra geral, o timeout do consumidor deve ser duas vezes o período do produtor.
+
+    - A mensagem tem o **COB-ID 0x700 + ID do nó** e a carga útil contém o estado do nó no primeiro byte de dados.
+
+    - Em sistemas CANopen antigos, o protocolo *Node/Life-Guarding* baseado em frames remotos CAN era usado para a mesma finalidade.
 
 - **USDO (*Universal Service Data Object*)**: Uma adição no CANopen FD, que permite o estabelecimento dinâmico de comunicação cruzada em unicast e broadcast, beneficiando sistemas embarcados que podem ser modificados pelo utilizador em tempo de execução.
 
@@ -433,25 +464,20 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 
 -  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do Dicionário de Objeto (OD) de outro nó através do barramento CAN. As solicitações e respostas SDO são enviadas através do protocolo cliente/servidor.
 
+**Protocolos de Controle de Erros**
 
-**Modelos Comunicação**:
+Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também permitem o monitoramento de uma rede CANopem:
 
-![alt text](docs/imgs/modelos_comunicacao_canopen.png)
+- ***Node/Life-Guarding***: Este serviço baseia-se no fato de o mestre NMT enviar uma mensagem RTR, de tal forma que o escravo apenas a responde. Na estrutura da mensagem temos o bit 7 sendo alterado em cada transferência ( permitindo assim determina se a mesma foi perdida) e nos bit 6 à 0 é inserido o status NMT atual do escravo.
 
-- **Mestre/escravo**: Neste modo, um nó atua como mestre (por exemplo, uma interface de controlo), enquanto os outros nós funcionam como escravos (por exemplo, um servomotor).
-    - O mestre é responsável por enviar ou solicitar dados dos escravos.
-    - É tipicamente utilizado para diagnósticos, configuração ou gestão de estados dos nós.
-    - Um exemplo de serviço que utiliza este protocolo é o NMT (*Network Management Objects*), que permite ao mestre controlar o estado dos escravos.
+    ![alt text](docs/imgs/nodeguarding_intrelavos.png)
 
-- **Cliente/Servidor**: Um cliente envia um pedido de dados a um servidor, que por sua vez responde com os dados solicitados.
-    - Este modelo é empregado quando, por exemplo, um mestre necessita de dados do Dicionário de Objeto (OD) de um escravo.
-    - A leitura de dados de um servidor é chamada de '*upload*', enquanto a escrita é um '*download*'.
-    - O principal serviço que utiliza este protocolo é o SDO (*Service Data Object*), que permite a leitura e escrita de valores do Dicionário de Objeto de um nó CANopen através do bus CAN.
+    Existem 3 intervalos de tempo: o *Guard time*, que é o tempo entre duas mensagens RTR; o *Live time factor*, que é um multiplicador para o tempo de guarda; e o *Possible live time*, que é o tempo resultante da multiplicação do *Guard time* pelo *Live time factor*.
 
-- **Produtor/Consumidor**: Neste modelo, um nó produtor transmite dados para a rede, e um ou mais nós consumidores recebem e utilizam esses dados.
-    - O produtor pode enviar os dados mediante solicitação (modelo "*pull*") ou sem um pedido específico (modelo "*push*").
-    - Este protocolo é utilizado para a transferência eficiente de dados operacionais em tempo real.
-    - O serviço associado é o PDO (*Process Data Object*), que transporta dados operacionais como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente).
+- ***Boot-up***: O o protocolo de inicialização representa um tipo especial de protocolo de controle de erros. O mesmo é transmitido como a ação final do estado NMT de *initialising* e antes do *pre-operational*. A recepção desta mensagem pode indica que um novo equipamento foi cadastrado na rede ou a ocorrência de falha na alimentação do dispositivo já conhecido.  
+
+    ![alt text](docs/imgs/boot-up_canopem.png)
+
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
 
