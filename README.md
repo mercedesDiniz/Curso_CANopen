@@ -464,6 +464,37 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 
 -  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do Dicionário de Objeto (OD) de outro nó através do barramento CAN. As solicitações e respostas SDO são enviadas através do protocolo cliente/servidor.
 
+**Object Dictionary (OD)**
+
+Todos os nós CANopen têm um dicionario de objetos, que são uma estrutura padronizada que contém todos os parâmetros que descrevem o comportamento do mesmo.
+
+As entradas do OD são pesquisadas por meio de um índice de 16 bits e um subíndice de 8 bits. Especificamente, uma entrada no dicionário de objetos é definida por atributos:
+
+- **Índice**: endereço base de 16 bits do objeto.
+- **Nome do objeto**: Nome do dispositivo do fabricante.
+- **Código objeto**: matriz, variável ou registro.
+    ![alt text](docs/imgs/ob_opcoes_definitions.png)
+
+- **Tipo de dados**: Ex.: VISIBLE_STRING, ou UNSIGNED32 ou Nome do Registro.
+- **Acesso**: 
+    ![alt text](docs/imgs/ob_opcoes_acesso.png)
+
+- **Categoria**: Indica se este parâmetro é obrigatório/opcional (M/O).
+
+O dicionário de objetos é dividido em **seções padronizadas** onde algumas entradas são obrigatórias e outras são totalmente personalizáveis:
+
+![alt text](docs/imgs/ob_structure_canopem.png)
+
+É importante ressaltar que as entradas OD de um dispositivo podem ser acessadas por outro dispositivo via CAN usando, por exemplo, **SDOs**.
+
+Para entender o OD, é útil consultar o *electronic data sheet* e o *device configuration file*:
+
+![alt text](docs/imgs/eds_and_dcf.png)
+
+- **Electronic Data Sheet (EDS)**: Na prática, a configuração/gerenciamento de redes CANopen é feito por meio de ferramentas de software/API. Para simplificar, a CiA 306-1 define um formato de arquivo INI, que atua como o "modelo" para o OD de um dispositivo.
+
+- **Device Configuration File (DCF)**: Suponha que uma fábrica tenha adquirido um equipamento que sera integrado ao sue sistema. Ao fazer isso, o operador edita o EDS do dispositivo com detalhes específicos da integração, por exemplo, especificando a taxa de bits do dispositivo e o ID do nó. Este EDS modificado pode ser exportado como um DCF para habilitar o dispositivo para integração em uma rede específica.
+
 **Protocolos de Controle de Erros**
 
 Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também permitem o monitoramento de uma rede CANopem:
