@@ -367,10 +367,6 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 
 ![alt text](docs/imgs/exemplos_co_fc_canopen.png)
 
--  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do Dicionário de Objeto (OD) de outro nó através do barramento CAN. As solicitações e respostas SDO são enviadas através do protocolo cliente/servidor.
-
--  **PDO (*Process Data Object*)**: Utilizado para a transferência eficiente de dados operacionais em tempo real, como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente). A comunicação PDO utiliza o protocolo produtor/consumidor.
-
 -  **NMT (*Network Management Objects*)**: 
     - Segue o protocolo mestre/escravo.
     - Um mestre NMT controla o estado (pré-operacional, operacional e parado) dos escravos através de comandos NMT (iniciar, parar e reiniciar), redefinindo um nó ou alterando o seu estado operacional.
@@ -393,6 +389,9 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 - **SYNC (*Synchronization Object*)**: 
     - Segue o protocolo produtor/consumidor. 
     - Fornece o mecanismo básico de sincronização da rede.
+
+        ![alt text](docs/imgs/sync_canopem.png)
+
     - Um produtor (em geral, o controlador/mestre da rede) transmite o SYNC (**COB-ID 0x80**) periodicamente, sendo este período de transmissão configurável.
 
         ![alt text](docs/imgs/exemplo_sync_canopen.png)
@@ -401,16 +400,38 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
     - Geralmente é usado para fins de gerenciamento de carga. Em tais casos de uso, os PDOs nos consumidores são acionados pela recepção de um número pré-configurado de SYNCs. 
     - Por padrão, as mensagens não transportam dados, mas a parti da CiA 301 versão 4.1 podem opcionalmente oferecer um valor de contador SYNC de 1 byte. 
 
-- **TIME (*Timestamp Object*)**: Também segue o protocolo produtor/consumidor e fornece um relógio em toda a rede.
+- **EMCY (*Emergency Object*)**: 
+    - Acionadas por um erro interno do diapositivo.
+    - Segue o protocolo produtor/consumidor, onde a mensagem de emergência é transmitida pelo produtor como um único frame de até 8 bytes. Zero ou mais consumidores emergência podem receber essas mensagens e iniciar contra-medidas adequadas. 
 
-- **EMCY (*Emergency Object*)**: Segue o protocolo produtor/consumidor e é utilizado quando um dispositivo experiencia um erro fatal, indicando-o ao resto da rede.
+        ![alt text](docs/imgs/frame_emcy_canopen.png)
+
+    - Uma mensagem de emergência é transmitida apenas uma vez por evento de erro.
+
+    - A mensagem EMCY tem o **COB-ID 0x80 + ID do nó**. Os bytes de dados contêm informações sobre o erro, incluindo um código de erro de 2 bytes, um registrador de erro de 1 byte e até 5 bytes de informações de erro específicas do fabricante.
+
+    - A tabela de códigos de erro da CiA 301: 
+
+        ![alt text](docs/imgs/emcy_error_codes_canopem.png)
+
+    - Códigos de erro adicionais podem ser especificados em perfis de dispositivos conforme a CiA 4XX. O suporte para EMCY é opcional, mas se um dispositivo o suportar, deverá suportar pelo menos os códigos de erro 0x0000 e 0x1000.
+
+- **TIME (*Timestamp Object*)**: 
+    - Segue o protocolo produtor/consumidor e fornece um relógio em toda a rede.
+    - O produtor transmite a mensagem TIME com o **COB-ID 0x100** e um payload de 6 bytes: 4 bytes de dados contêm o tempo em ms após a meia-noite e os próximos 2 bytes contêm o número de dias desde 1º de janeiro de 1984.
+
+        ![alt text](docs/imgs/time_canopem.png)
+
+    - Os *jitters* de tempo devem ser considerados, pois atrasos na transmissão podem ocorrer devido a arbitragem.
+    - O tempo entre as mensagens de TIME dependem da aplicação, ou seja, é definido pelo produtor. 
 
 - **HEARTBEAT (*Heartbeat Object*)**: Um nó envia periodicamente uma mensagem HEARTBEAT para comunicar o seu estado.
 
 - **USDO (*Universal Service Data Object*)**: Uma adição no CANopen FD, que permite o estabelecimento dinâmico de comunicação cruzada em unicast e broadcast, beneficiando sistemas embarcados que podem ser modificados pelo utilizador em tempo de execução.
 
-**Estados dos Dispositivos** 
+-  **PDO (*Process Data Object*)**: Utilizado para a transferência eficiente de dados operacionais em tempo real, como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente). A comunicação PDO utiliza o protocolo produtor/consumidor.
 
+-  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do Dicionário de Objeto (OD) de outro nó através do barramento CAN. As solicitações e respostas SDO são enviadas através do protocolo cliente/servidor.
 
 
 **Modelos Comunicação**:
