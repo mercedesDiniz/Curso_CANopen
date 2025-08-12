@@ -25,6 +25,7 @@ Minhas anotações e atividades do treinamento do professor Rodrigo Moreira Borg
     - [CAN Bus Explained - A Simple Intro [2025]](https://www.csselectronics.com/pages/can-bus-simple-intro-tutorial)
     - [Application Report - Texas Instruments - Introduction to the Controller Area Network (CAN) [2016]](https://www.ti.com/lit/an/sloa101b/sloa101b.pdf?ts=1750050977741&ref_url=https%253A%252F%252Fwww.google.com%252F)
     - [CANopen Explained - A Simple Intro [2025]](https://www.csselectronics.com/pages/canopen-tutorial-simple-intro)
+    - [CANopen EDS File Explained - A Simple Intro [2025]](https://www.csselectronics.com/pages/canopen-eds-file-electronic-data-sheet)
     - [WEG - Manual da Comunicação CANopen](https://static.weg.net/medias/downloadcenter/h2f/h1a/WEG-cfw11-manual-da-comunicacao-canopen-plc11-10002134020-manual-portugues-br.pdf)
     - [SIEMENS - CANopen Tutorial - Version 2](https://cache.industry.siemens.com/dl/files/771/109479771/att_993267/v1/109479771_CANopen_Tutorial_V20_en.pdf)
 
@@ -551,6 +552,34 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
         - Transferência em bloco.
 
 - **USDO (*Universal Service Data Object*)**: Uma adição no CANopen FD, que permite o estabelecimento dinâmico de comunicação cruzada em unicast e broadcast, beneficiando sistemas embarcados que podem ser modificados pelo utilizador em tempo de execução.
+
+**Device Profiles**
+
+O perfis de dispositivos são especificações padronizadas que definem o comportamento e a funcionalidade de dispositivos típicos em uma rede CANopen. Eles fornecem uma descrição detalhada das funções que um dispositivo pode desempenhar, como deve se comunicar na rede e como os dados devem ser estruturados.
+
+Lista dos perfis padronizados da CiA:
+- CiA 301 – CANopen Application Layer and Communication Profile
+- CiA 302 – Framework for CANopen Additional Application Layer Functions
+- CiA 401 – Generic I/O modules device profile
+- CiA 402 – Device profile for drives and motion control
+- CiA 404 – Device profile for measuring devices and closed-loop controllers
+- CiA 405 – Device profile for IEC 61131-3 programmable devices
+- CiA 406 – Device profile for encoders
+- CiA 408 – Device profile for fluid power technology
+- CiA 410 – Device profile for extruder downstream devices
+- CiA 412 – Device profile for measuring systems for liquid levels
+- CiA 413 – Device profile for laboratory automation devices
+- CiA 414 – Device profile for weighing devices
+- CiA 418 – Device profile for battery modules
+- CiA 419 – Device profile for battery chargers
+- CiA 420 – Device profile for photovoltaic devices
+- CiA 422 – Device profile for compressors
+- CiA 424 – Device profile for refrigeration devices
+- CiA 425 – Device profile for waste water treatment devices
+- CiA 437 – Device profile for generic encoder interfaces
+- CiA 447 – Device profile for special-purpose car add-on devices
+- CiA 450 – Device profile for pumps
+- CiA 454 – Device profile for building automation
 
 **Protocolos de Controle de Erros**
 
