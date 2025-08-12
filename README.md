@@ -580,7 +580,62 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
 
+**Topologia Básica**
 
+A rede CANopen utiliza uma linha de transmissão principal (*trunk cable*), que deve ser terminada em ambas as extremidades físicas com resistores de terminação de 120 Ω compatíveis com a impedância característica do cabo. O cabo principal pode interligar dispositivos por meio de *T-connectors* ou ramais curtos (*stub cables*).
 
+Um TAP, em combinação com *cabos drop* (ou *stub*), permite a formação de uma topologia de estrela parcial. Para minimizar reflexões e preservar a integridade do sinal, a regra geral é manter os cabos o mais curtos possível, seguindo as fórmulas de dimensionamento recomendadas no CiA 303-1. Além disso, a soma dos comprimentos de todos os *cabos drop* não deve exceder o limite calculado para a taxa de transmissão utilizada.
+
+O comprimento máximo do barramento depende diretamente da velocidade de transmissão (*bit rate*) e da bitola do cabo. Por exemplo, cabos de 0,25 mm² permitem até cerca de 200 m a 125 kbit/s com 32 nós, enquanto cabos mais grossos (0,75 mm²) podem chegar a 550 m. Atrasos de propagação, perdas resistivas e a qualidade dos conectores devem ser considerados no projeto.
+
+![alt text](docs/imgs/topologia_basica_redes_canopem.png)
+
+Obs.: Não pode haver o cascateamento de TAPs.
+
+**Topologia com Repetidor**
+
+A rede CANopem pode ser composta por um ou vários segmentos, interligados fisicamente através de um repetidor CAN. Ele recebe os sinais de um lado, recondiciona (restaura níveis de tensão, forma de onda e temporização) e retransmite para o outro lado.
+
+Um repetidor:
+- Permitindo assim mais de 64 nós;
+- Pode fornecer isolamento entre os segmentos, senso do que cada uma desses segmentos ter os resistores de terminação;
+- É transparente, do ponto de vista da rede, pois simplesmente encaminha os sinais CAN, com os dispositivos conectados ao barramento participando da mesma arbitragem;
+- Não permite aumentar o comprimento total do cabo. 
+
+![alt text](docs/imgs/topologia_com_repetidor_redes_canopem.png)
+
+**Topologia com Encadeamento de Cabo**
+
+Os dispositivos são conectados em série ao longo de um único cabo principal (*trunk cable*). Cada nó possui dois conectores — um de entrada e um de saída — permitindo que o cabo passe “através” do dispositivo até o próximo.
+
+O encadeamento pode ser realizado de duas maneiras:
+
+- Conectando dois cabos ao mesmo conector:
+
+![alt text](docs/imgs/topologia_com_encadeamento_de_cabo_1_redes_canopem.png)
+
+- Conectando os dois cabos aos conectores individuais de dispositivos com uma conector para entrada e outros para saída:
+
+![alt text](docs/imgs/topologia_com_encadeamento_de_cabo_2_redes_canopem.png)
+
+**Topologia com Bridge**
+
+Uma *bridge* CAN (ponte) conecta duas ou mais redes CAN que não compartilham o mesmo barramento físico. Ela lê mensagens de uma rede, interpreta de acordo com regras configuradas e retransmite para outra rede apenas as mensagens desejadas. Ao contrário do repetidor, a bridge não precisa repetir tudo — pode filtrar, alterar IDs, ou até converter protocolos.
+
+Um *bridge*:
+- Pode separar a rede CAN geral em sub-redes independentes;
+- Fornece uma arbitragem individual;
+- Possibilita que cada sub-rede tenha velocidades de transmissão distintas;
+- Permite ampliar o tamanho máximo da rede.
+
+![alt text](docs/imgs/topologia_com_bridge_redes_canopem.png)
+
+**Topologia com Fonte de Alimentação Externa**
+
+Trata-se de uma variação na infraestrutura elétrica da rede para que os dispositivos recebam energia pelo próprio cabo de comunicação. Além dos dois fios de sinal do barramento CAN (`CAN_H` e `CAN_L`) e do fio de referência (`CAN_GND`), o cabo do barramento leva também linhas de alimentação (tipicamente `CAN_V+` e `CAN_V-` e usa o `CAN_GND` como retorno). O CiA 303-1 recomenda que essa tensão esteja entre +18 VDC e +30 VDC para permitir o uso de fontes padrão de 24 VDC.
+
+![alt text](docs/imgs/topologia_com_alimentacao_externa_redes_canopem.png)
+
+Obs.: Repetidores, *bridges*, cabos RJ45 não encaminham o sinal de alimentação `CAN_V+`.
 
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
