@@ -491,9 +491,35 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 
     - Em sistemas CANopen antigos, o protocolo *Node/Life-Guarding* baseado em frames remotos CAN era usado para a mesma finalidade.
 
-- **USDO (*Universal Service Data Object*)**: Uma adição no CANopen FD, que permite o estabelecimento dinâmico de comunicação cruzada em unicast e broadcast, beneficiando sistemas embarcados que podem ser modificados pelo utilizador em tempo de execução.
-
 -  **PDO (*Process Data Object*)**: Utilizado para a transferência eficiente de dados operacionais em tempo real, como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente). A comunicação PDO utiliza o protocolo produtor/consumidor.
+    - **Campos de um frames PDO:** 
+
+        ![alt text](docs/imgs/frame_pdo_canopen.png)
+
+        - **COB-ID**:
+
+            ![alt text](docs/imgs/exemplo_cobid_pdo.png)
+        
+            - **TPDO (*Transmit Process Data Object*)** : Usado pelo produtor para transmitir seus dados para outros dispositivos na rede, permitindo configurar a quantidade e o tipo de dados a serem transmitidos.
+                - **COB-ID = 0x180 + Node ID + TPDO Number**
+
+                ![alt text](docs/imgs/pdo_write_canopem.png)
+
+            - **RPDO (*Receive Process Data Object*)**: Usado pelo consumidor para receber dados de outros dispositivos na rede, permitindo configurar o nó para "escuta" a transmissão.
+                - **COB-ID = 0x200 + Node ID + RPDO Number**
+
+                ![alt text](docs/imgs/pdo_read_canopem.png)
+
+            Obs.: O *TPDO Number* e o *RPDO Number* são um número entre 1 e 4, representando um dos quatro possíveis tipos que um dispositivo pode ter.
+
+        - **Campos de dados**: 
+            - **Bytes 0-1** - 2 bytes
+            - **Bytes 2-3** - 2 bytes
+            - **Bytes 4-7** - 4 bytes
+
+    - **Modos de transferência das mensagens PDOs:**
+
+        ![alt text](docs/imgs/tipos_de_transmissao_pdo.png)
 
 -  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do dicionário de objeto (OD) de outro nó através do barramento CAN. As mensagens SDOs são enviadas através do protocolo "cliente/servidor". Especificamente, um "cliente" SDO inicia a comunicação com um "servidor" SDO. O objetivo pode ser atualizar uma entrada OD ("*download* SDO") ou ler uma entrada ("*upload* SDO"), o que permite, por exemplo, configuração e diagnóstico de nós.
 
@@ -524,6 +550,7 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
         - Transferência normal (segmentada),
         - Transferência em bloco.
 
+- **USDO (*Universal Service Data Object*)**: Uma adição no CANopen FD, que permite o estabelecimento dinâmico de comunicação cruzada em unicast e broadcast, beneficiando sistemas embarcados que podem ser modificados pelo utilizador em tempo de execução.
 
 **Protocolos de Controle de Erros**
 
