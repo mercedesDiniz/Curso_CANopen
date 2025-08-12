@@ -558,28 +558,10 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 O perfis de dispositivos são especificações padronizadas que definem o comportamento e a funcionalidade de dispositivos típicos em uma rede CANopen. Eles fornecem uma descrição detalhada das funções que um dispositivo pode desempenhar, como deve se comunicar na rede e como os dados devem ser estruturados.
 
 Lista dos perfis padronizados da CiA:
-- CiA 301 – CANopen Application Layer and Communication Profile
-- CiA 302 – Framework for CANopen Additional Application Layer Functions
-- CiA 401 – Generic I/O modules device profile
-- CiA 402 – Device profile for drives and motion control
-- CiA 404 – Device profile for measuring devices and closed-loop controllers
-- CiA 405 – Device profile for IEC 61131-3 programmable devices
-- CiA 406 – Device profile for encoders
-- CiA 408 – Device profile for fluid power technology
-- CiA 410 – Device profile for extruder downstream devices
-- CiA 412 – Device profile for measuring systems for liquid levels
-- CiA 413 – Device profile for laboratory automation devices
-- CiA 414 – Device profile for weighing devices
-- CiA 418 – Device profile for battery modules
-- CiA 419 – Device profile for battery chargers
-- CiA 420 – Device profile for photovoltaic devices
-- CiA 422 – Device profile for compressors
-- CiA 424 – Device profile for refrigeration devices
-- CiA 425 – Device profile for waste water treatment devices
-- CiA 437 – Device profile for generic encoder interfaces
-- CiA 447 – Device profile for special-purpose car add-on devices
-- CiA 450 – Device profile for pumps
-- CiA 454 – Device profile for building automation
+- [Generic device profiles](https://www.can-cia.org/can-knowledge/generic-device-profiles)
+- [Application-specific device profiles](https://www.can-cia.org/can-knowledge/application-specific-device-profiles)
+- [Interface profiles](https://www.can-cia.org/can-knowledge/interface-profiles)
+- [Application profiles](https://www.can-cia.org/can-knowledge/application-profiles)
 
 **Protocolos de Controle de Erros**
 
@@ -597,5 +579,8 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
+
+
+
 
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
