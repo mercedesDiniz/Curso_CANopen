@@ -370,6 +370,39 @@ Os mesmos se relacionam da seguinte forma:
     - Este protocolo é utilizado para a transferência eficiente de dados operacionais em tempo real.
     - O serviço associado é o PDO (*Process Data Object*), que transporta dados operacionais como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente).
 
+**Object Dictionary (OD)**
+
+Todos os nós CANopen têm um dicionario de objetos, que são uma estrutura padronizada que contém todos os parâmetros que descrevem o comportamento do mesmo.
+
+As entradas do OD são pesquisadas por meio de um índice de 16 bits e um subíndice de 8 bits. Especificamente, uma entrada no dicionário de objetos é definida por atributos:
+
+- **Índice**: endereço base de 16 bits do objeto.
+- **Nome do objeto**: Nome do dispositivo do fabricante.
+- **Código objeto**: matriz, variável ou registro.
+
+    ![alt text](docs/imgs/ob_opcoes_definitions.png)
+
+- **Tipo de dados**: Ex.: VISIBLE_STRING, ou UNSIGNED32 ou Nome do Registro.
+- **Acesso**: 
+
+    ![alt text](docs/imgs/ob_opcoes_acesso.png)
+
+- **Categoria**: Indica se este parâmetro é obrigatório/opcional (M/O).
+
+O dicionário de objetos é dividido em **seções padronizadas** onde algumas entradas são obrigatórias e outras são totalmente personalizáveis:
+
+![alt text](docs/imgs/ob_structure_canopem.png)
+
+É importante ressaltar que as entradas OD de um dispositivo podem ser acessadas por outro dispositivo via CAN usando, por exemplo, **SDOs**.
+
+Para entender o OD, é útil consultar o *electronic data sheet* e o *device configuration file*:
+
+![alt text](docs/imgs/eds_and_dcf.png)
+
+- **Electronic Data Sheet (EDS)**: Na prática, a configuração/gerenciamento de redes CANopen é feito por meio de ferramentas de software/API. Para simplificar, a CiA 306-1 define um formato de arquivo INI, que atua como o "modelo" para o OD de um dispositivo.
+
+- **Device Configuration File (DCF)**: Suponha que uma fábrica tenha adquirido um equipamento que sera integrado ao sue sistema. Ao fazer isso, o operador edita o EDS do dispositivo com detalhes específicos da integração, por exemplo, especificando a taxa de bits do dispositivo e o ID do nó. Este EDS modificado pode ser exportado como um DCF para habilitar o dispositivo para integração em uma rede específica.
+
 **Frames e COB-IDs**
 
 Para entender a comunicação, é útil entender primeiro o frame CANopen:
@@ -462,38 +495,35 @@ Além disso, CANopen especifica uma série de ***Communication Object*** que ate
 
 -  **PDO (*Process Data Object*)**: Utilizado para a transferência eficiente de dados operacionais em tempo real, como pressão ou temperatura. Os PDOs podem ser enviados de forma síncrona (em resposta a uma mensagem SYNC) ou orientada por eventos (por exemplo, periodicamente). A comunicação PDO utiliza o protocolo produtor/consumidor.
 
--  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do Dicionário de Objeto (OD) de outro nó através do barramento CAN. As solicitações e respostas SDO são enviadas através do protocolo cliente/servidor.
+-  **SDO (*Service Data Object*)**: Permite que um nó CANopen leia ou escreva valores do dicionário de objeto (OD) de outro nó através do barramento CAN. As mensagens SDOs são enviadas através do protocolo "cliente/servidor". Especificamente, um "cliente" SDO inicia a comunicação com um "servidor" SDO. O objetivo pode ser atualizar uma entrada OD ("*download* SDO") ou ler uma entrada ("*upload* SDO"), o que permite, por exemplo, configuração e diagnóstico de nós.
 
-**Object Dictionary (OD)**
+    - **Campos de um frames SDO:**
+        - **COB-ID**: 
+            - ***Transmit* SDO** (0x580 + ID do nó): Usado para enviar comandos SDO (geralmente comandos de *download* ou *upload*).
+            - ***Receive*** (0x600 + ID do nó): Usado para receber os dados solicitados no processo de *upload* ou *download*. 
+        - **Bytes 0**:
+            - **CCS (*client command specifier*)** - 3 bits: Identifica o tipo de transferência.
+                - *Download* (1 - $001_b$): Comando para escrever dados em um OD de um dispositivo.
+                - *Upload* (2 - $010_b$): Comando para ler dados de um OD de um dispositivo.
+            - ***n*** - 2 bits: Número de bytes do campo de dados (bytes 4-7) que não contêm dados.
+            - **e** - 1 bits: Se definido, indica uma 'transferência rápida' (todos os dados estão em um único quadro CAN).
+            - **s** - 1 bits: se definido, indica que o tamanho dos dados é mostrado em *n*.
+        - **Byte 1-2** - 16 bits: Índice refletem o endereço OD a ser acessado
+        - **Byte 3** - 8 bits: Subíndice refletem o endereço OD a ser acessado.
+        - **Bytes 4-7**: Contêm os dados (máximo 4 bytes). Quando um comando de *download* é enviado, esse campo na mensagem de resposta fica vazio, pois é apenas uma confirmação que a operação de escrita foi realizada. Já quando um comando de *upload* é executado, esse campo na mensagem de resposta contêm o valor do dado armazenado OD especificado.
 
-Todos os nós CANopen têm um dicionario de objetos, que são uma estrutura padronizada que contém todos os parâmetros que descrevem o comportamento do mesmo.
+    - **Exemplo de um frame SDO**:
+    
+        ![alt text](docs/imgs/sdo_frame_canopem.png)
 
-As entradas do OD são pesquisadas por meio de um índice de 16 bits e um subíndice de 8 bits. Especificamente, uma entrada no dicionário de objetos é definida por atributos:
+    - **Modos de transferência das mensagens SDOs:**
 
-- **Índice**: endereço base de 16 bits do objeto.
-- **Nome do objeto**: Nome do dispositivo do fabricante.
-- **Código objeto**: matriz, variável ou registro.
-    ![alt text](docs/imgs/ob_opcoes_definitions.png)
+        ![alt text](docs/imgs/sdo_variantes_canopem.png)
 
-- **Tipo de dados**: Ex.: VISIBLE_STRING, ou UNSIGNED32 ou Nome do Registro.
-- **Acesso**: 
-    ![alt text](docs/imgs/ob_opcoes_acesso.png)
+        - Transferência rápida,
+        - Transferência normal (segmentada),
+        - Transferência em bloco.
 
-- **Categoria**: Indica se este parâmetro é obrigatório/opcional (M/O).
-
-O dicionário de objetos é dividido em **seções padronizadas** onde algumas entradas são obrigatórias e outras são totalmente personalizáveis:
-
-![alt text](docs/imgs/ob_structure_canopem.png)
-
-É importante ressaltar que as entradas OD de um dispositivo podem ser acessadas por outro dispositivo via CAN usando, por exemplo, **SDOs**.
-
-Para entender o OD, é útil consultar o *electronic data sheet* e o *device configuration file*:
-
-![alt text](docs/imgs/eds_and_dcf.png)
-
-- **Electronic Data Sheet (EDS)**: Na prática, a configuração/gerenciamento de redes CANopen é feito por meio de ferramentas de software/API. Para simplificar, a CiA 306-1 define um formato de arquivo INI, que atua como o "modelo" para o OD de um dispositivo.
-
-- **Device Configuration File (DCF)**: Suponha que uma fábrica tenha adquirido um equipamento que sera integrado ao sue sistema. Ao fazer isso, o operador edita o EDS do dispositivo com detalhes específicos da integração, por exemplo, especificando a taxa de bits do dispositivo e o ID do nó. Este EDS modificado pode ser exportado como um DCF para habilitar o dispositivo para integração em uma rede específica.
 
 **Protocolos de Controle de Erros**
 
