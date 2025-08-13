@@ -19,7 +19,8 @@ Minhas anotações e atividades do treinamento do professor Rodrigo Moreira Borg
 
 - [Site oficial do CANopen CC](https://www.can-cia.org/can-knowledge/canopen)
     - [CiA 301 versão 4.2.0](docs/cia301-v4.2.0.pdf)
-
+    - [CiA 303-1 (versão 2.0): Device and network design - Part 1: CANopen physical layer](docs/cia303.1-v2.0.1_device_and_network_design-part1_canopen_physical_layer.pdf)
+    - [CiA 106 (versão 1.1): Connector pin-assignment recommendations](docs/cia106-v1.1_connector_pin_assignmente_recommendations.pdf)
 - Referencias:
     - [CAN: From physical layer to application layer and beyond](https://www.can-cia.org/can-knowledge)
     - [CAN Bus Explained - A Simple Intro [2025]](https://www.csselectronics.com/pages/can-bus-simple-intro-tutorial)
@@ -580,62 +581,113 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
 ### 3. [Arquitetura, Componentes e Projeto de Rede](#3-arquitetura-componentes-e-projeto-de-rede)
 
-**Topologia Básica**
+**Arquiteturas:**
 
-A rede CANopen utiliza uma linha de transmissão principal (*trunk cable*), que deve ser terminada em ambas as extremidades físicas com resistores de terminação de 120 Ω compatíveis com a impedância característica do cabo. O cabo principal pode interligar dispositivos por meio de *T-connectors* ou ramais curtos (*stub cables*).
+- **Topologia Básica**
 
-Um TAP, em combinação com *cabos drop* (ou *stub*), permite a formação de uma topologia de estrela parcial. Para minimizar reflexões e preservar a integridade do sinal, a regra geral é manter os cabos o mais curtos possível, seguindo as fórmulas de dimensionamento recomendadas no CiA 303-1. Além disso, a soma dos comprimentos de todos os *cabos drop* não deve exceder o limite calculado para a taxa de transmissão utilizada.
+    A rede CANopen utiliza uma linha de transmissão principal (*trunk cable*), que deve ser terminada em ambas as extremidades físicas com resistores de terminação de 120 Ω compatíveis com a impedância característica do cabo. O cabo principal pode interligar dispositivos por meio de *T-connectors* ou ramais curtos (*stub cables*).
 
-O comprimento máximo do barramento depende diretamente da velocidade de transmissão (*bit rate*) e da bitola do cabo. Por exemplo, cabos de 0,25 mm² permitem até cerca de 200 m a 125 kbit/s com 32 nós, enquanto cabos mais grossos (0,75 mm²) podem chegar a 550 m. Atrasos de propagação, perdas resistivas e a qualidade dos conectores devem ser considerados no projeto.
+    Um TAP, em combinação com *cabos drop* (ou *stub*), permite a formação de uma topologia de estrela parcial. Para minimizar reflexões e preservar a integridade do sinal, a regra geral é manter os cabos o mais curtos possível, seguindo as fórmulas de dimensionamento recomendadas. Além disso, a soma dos comprimentos de todos os *cabos drop* não deve exceder o limite calculado para a taxa de transmissão utilizada.
 
-![alt text](docs/imgs/topologia_basica_redes_canopem.png)
+    O comprimento máximo do barramento depende diretamente da velocidade de transmissão (*bit rate*) e da bitola do cabo. Por exemplo, cabos de 0,25 mm² permitem até cerca de 200 m a 125 kbit/s com 32 nós, enquanto cabos mais grossos (0,75 mm²) podem chegar a 550 m. Atrasos de propagação, perdas resistivas e a qualidade dos conectores devem ser considerados no projeto.
 
-Obs.: Não pode haver o cascateamento de TAPs.
+    ![alt text](docs/imgs/topologia_basica_redes_canopem.png)
 
-**Topologia com Repetidor**
+    Obs.: Não pode haver o cascateamento de TAPs.
 
-A rede CANopem pode ser composta por um ou vários segmentos, interligados fisicamente através de um repetidor CAN. Ele recebe os sinais de um lado, recondiciona (restaura níveis de tensão, forma de onda e temporização) e retransmite para o outro lado.
+- **Topologia com Repetidor**
 
-Um repetidor:
-- Permitindo assim mais de 64 nós;
-- Pode fornecer isolamento entre os segmentos, senso do que cada uma desses segmentos ter os resistores de terminação;
-- É transparente, do ponto de vista da rede, pois simplesmente encaminha os sinais CAN, com os dispositivos conectados ao barramento participando da mesma arbitragem;
-- Não permite aumentar o comprimento total do cabo. 
+    A rede CANopem pode ser composta por um ou vários segmentos, interligados fisicamente através de um repetidor CAN. Ele recebe os sinais de um lado, recondiciona (restaura níveis de tensão, forma de onda e temporização) e retransmite para o outro lado.
 
-![alt text](docs/imgs/topologia_com_repetidor_redes_canopem.png)
+    Um repetidor:
+    - Permitindo assim mais de 64 nós;
+    - Pode fornecer isolamento entre os segmentos, senso do que cada uma desses segmentos ter os resistores de terminação;
+    - É transparente, do ponto de vista da rede, pois simplesmente encaminha os sinais CAN, com os dispositivos conectados ao barramento participando da mesma arbitragem;
+    - Não permite aumentar o comprimento total do cabo. 
 
-**Topologia com Encadeamento de Cabo**
+        ![alt text](docs/imgs/topologia_com_repetidor_redes_canopem.png)
 
-Os dispositivos são conectados em série ao longo de um único cabo principal (*trunk cable*). Cada nó possui dois conectores — um de entrada e um de saída — permitindo que o cabo passe “através” do dispositivo até o próximo.
+- **Topologia com Encadeamento de Cabo**
 
-O encadeamento pode ser realizado de duas maneiras:
+    Os dispositivos são conectados em série ao longo de um único cabo principal (*trunk cable*). Cada nó possui dois conectores — um de entrada e um de saída — permitindo que o cabo passe “através” do dispositivo até o próximo.
 
-- Conectando dois cabos ao mesmo conector:
+    O encadeamento pode ser realizado de duas maneiras:
 
-![alt text](docs/imgs/topologia_com_encadeamento_de_cabo_1_redes_canopem.png)
+    - Conectando dois cabos ao mesmo conector:
 
-- Conectando os dois cabos aos conectores individuais de dispositivos com uma conector para entrada e outros para saída:
+        ![alt text](docs/imgs/topologia_com_encadeamento_de_cabo_1_redes_canopem.png)
 
-![alt text](docs/imgs/topologia_com_encadeamento_de_cabo_2_redes_canopem.png)
+    - Conectando os dois cabos aos conectores individuais de dispositivos com uma conector para entrada e outros para saída:
 
-**Topologia com Bridge**
+        ![alt text](docs/imgs/topologia_com_encadeamento_de_cabo_2_redes_canopem.png)
 
-Uma *bridge* CAN (ponte) conecta duas ou mais redes CAN que não compartilham o mesmo barramento físico. Ela lê mensagens de uma rede, interpreta de acordo com regras configuradas e retransmite para outra rede apenas as mensagens desejadas. Ao contrário do repetidor, a bridge não precisa repetir tudo — pode filtrar, alterar IDs, ou até converter protocolos.
+- **Topologia com Bridge**
 
-Um *bridge*:
-- Pode separar a rede CAN geral em sub-redes independentes;
-- Fornece uma arbitragem individual;
-- Possibilita que cada sub-rede tenha velocidades de transmissão distintas;
-- Permite ampliar o tamanho máximo da rede.
+    Uma *bridge* CAN (ponte) conecta duas ou mais redes CAN que não compartilham o mesmo barramento físico. Ela lê mensagens de uma rede, interpreta de acordo com regras configuradas e retransmite para outra rede apenas as mensagens desejadas. Ao contrário do repetidor, a bridge não precisa repetir tudo — pode filtrar, alterar IDs, ou até converter protocolos.
 
-![alt text](docs/imgs/topologia_com_bridge_redes_canopem.png)
+    Um *bridge*:
+    - Pode separar a rede CAN geral em sub-redes independentes;
+    - Fornece uma arbitragem individual;
+    - Possibilita que cada sub-rede tenha velocidades de transmissão distintas;
+    - Permite ampliar o tamanho máximo da rede.
 
-**Topologia com Fonte de Alimentação Externa**
+    ![alt text](docs/imgs/topologia_com_bridge_redes_canopem.png)
 
-Trata-se de uma variação na infraestrutura elétrica da rede para que os dispositivos recebam energia pelo próprio cabo de comunicação. Além dos dois fios de sinal do barramento CAN (`CAN_H` e `CAN_L`) e do fio de referência (`CAN_GND`), o cabo do barramento leva também linhas de alimentação (tipicamente `CAN_V+` e `CAN_V-` e usa o `CAN_GND` como retorno). O CiA 303-1 recomenda que essa tensão esteja entre +18 VDC e +30 VDC para permitir o uso de fontes padrão de 24 VDC.
+- **Topologia com Fonte de Alimentação Externa**
 
-![alt text](docs/imgs/topologia_com_alimentacao_externa_redes_canopem.png)
+    Trata-se de uma variação na infraestrutura elétrica da rede para que os dispositivos recebam energia pelo próprio cabo de comunicação. Além dos dois fios de sinal do barramento CAN (`CAN_H` e `CAN_L`) e do fio de referência (`CAN_GND`), o cabo do barramento leva também linhas de alimentação (tipicamente `CAN_V+` e `CAN_V-` e usa o `CAN_GND` como retorno). O CiA 303-1 recomenda que essa tensão esteja entre +18 VDC e +30 VDC para permitir o uso de fontes padrão de 24 VDC.
 
-Obs.: Repetidores, *bridges*, cabos RJ45 não encaminham o sinal de alimentação `CAN_V+`.
+    ![alt text](docs/imgs/topologia_com_alimentacao_externa_redes_canopem.png)
+
+    Obs.: Repetidores, *bridges*, cabos RJ45 não encaminham o sinal de alimentação `CAN_V+`.
+
+**Sistema de Cabeamento** ([CiA 303-1](docs/cia303.1-v2.0.1_device_and_network_design-part1_canopen_physical_layer.pdf))
+
+- **Elementos**
+    - ***Bus Cable***: Cabo de barramento terminado em ambas as extremidades por resistores de terminação.
+    - ***Stub Cable***: Ramal curto conectado ao cabo de barramento, não terminado por resistor, que liga o dispositivo CANopen ao barramento.
+    - ***T-connector***: Conector elétrico em formato de “T”, com três pontos de conexão, usado para ligar o cabo de barramento a um dispositivo ou a um *stub cable*.
+    - ***Trunk Cable***: Espinha dorsal do cabo de barramento, sem ramais (*stub cables*), que interliga os dispositivos ao longo da rede.
+
+- **Recomendações**:
+    - **Cabos**:
+        - **Impedância característica**: usar cabos com 120 Ω e atraso específico de 5 ns/m (típico para cabos CAN de alta velocidade – ISO 11898-2).
+        - **Comprimento máximo**: 
+
+            ![alt text](docs/imgs/tabela1_cia303.1.png)
+
+            Obs.: Recomendação para redes com memos de 64 dispositivos.
+
+        - **Bitola mínima**:
+
+            ![alt text](docs/imgs/tabela2_cia303.1.png)
+
+
+        - **Correspondência de impedâncias**: cabos e conectores devem ter impedância compatível para evitar reflexões.
+        - **Cabos *Stub* (*Drop*)**: Devem ser o mais curtos possível para evitar reflexões.
+            - Cumprir fórmulas do CiA para calcular comprimento máximo de stub em função da taxa de bits: $l_u < \frac{t_{\mathrm{PROPSEG}}}{50 \cdot t_p}$
+
+            - A soma de todos os stubs também é limitada por: $\sum_{i=1}^{n} l_{u_i} < \frac{t_{\mathrm{PROPSEG}}}{10 \cdot t_p}$
+
+    - **Conectores**:
+        - Usar conectores cuja resistência de transmissão seja entre 2,5 mΩ e 10 mΩ.
+        - Plug (macho) não deve ser alimentado; tomada (fêmea) pode ser alimentada.
+        - Seguir [CiA 106](docs/cia106-v1.1_connector_pin_assignmente_recommendations.pdf) para pinagem padronizada de conectores.
+
+    - **Resistores de Terminação**:
+        - Valor nominal 120 Ω ± (mínimo aceitável: 118 Ω).
+        - Devem estar apenas nas duas extremidades físicas do barramento.
+        - Resistores devem ser posicionados o mais próximo possível do último nó.
+
+    
+
+
+
+
+
+
+
+
+
 
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
