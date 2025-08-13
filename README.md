@@ -662,7 +662,6 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
             ![alt text](docs/imgs/tabela2_cia303.1.png)
 
-
         - **Correspondência de impedâncias**: cabos e conectores devem ter impedância compatível para evitar reflexões.
         - **Cabos *Stub* (*Drop*)**: Devem ser o mais curtos possível para evitar reflexões.
             - Cumprir fórmulas do CiA para calcular comprimento máximo de stub em função da taxa de bits: $l_u < \frac{t_{\mathrm{PROPSEG}}}{50 \cdot t_p}$
@@ -679,15 +678,39 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
         - Devem estar apenas nas duas extremidades físicas do barramento.
         - Resistores devem ser posicionados o mais próximo possível do último nó.
 
+**Projeto da Rede**   
+- **Dicas básicas**:
+    - Documente o projeto da rede com os cálculos associados;
+    - Atribuir a cada nó um endereço exclusivo;
+    - Certifique-se que os nós de uma mesma rede tenham a mesma velocidade de transmissão;
+    - Verificar se o comprimento e a seção transversal dos cabos estão de acordo com a norma;
+    - Verificar se todos os segmentos têm resistores de terminação em suas extremidades.
+
+- **Blindagem e Aterramento**
+Para minimizar distúrbios de modo comum e garantir alta imunidade a interferências eletromagnéticas, recomenda-se:
+
+    - Em redes CANopen totalmente isoladas galvanicamente, o fio de terra (CAN_GND) deve ser conduzido junto com o cabo de comunicação. Esse fio deve ser conectado ao potencial de terra do CAN em apenas um ponto da rede.
+
+    - Se houver um dispositivo com interface não isolada galvanicamente, ele será o responsável por fornecer a conexão ao terra do barramento. Apenas um dispositivo desse tipo deve estar conectado à rede.
+
+    - O projetista deve garantir que a tensão de modo comum nos transceptores não ultrapasse o limite suportado pelos dispositivos.
+
+    - Recomenda-se usar cabos de par trançado blindados. A blindagem deve ser conectada ao terra funcional (FE) de cada dispositivo. Isso pode ser feito, por exemplo, conectando a blindagem à carcaça metálica do conector (ex.: conector SUB-D de 9 pinos).
+
+- **Cabeamento em Gabinetes**
+
+    Normalmente a cabeamento de dispositivos em gabinetes é baseado em conectores RJ45.
+
+    ![alt text](docs/imgs/topologia_de_cabeamento_de_dispositivos_em_gabinetes.png)
     
+    Quando se utilizam esses elementos de infraestrutura diretamente na linha tronco da rede, algumas restrições devem ser observadas:
 
+    -  O comprimento máximo permitido para o cabo é reduzido em 50% em relação ao especificado para um cabo CANopen padrão.
 
+    - Esses elementos de cabeamento devem ser empregados apenas dentro de um único gabinete. Não são recomendados para interligar gabinetes diferentes diretamente.
 
+    - Caso seja necessário distribuir a rede CANopen entre gabinetes distintos, deve-se utilizar cabos CANopen padrão para fazer essa interligação.
 
-
-
-
-
-
+    - Conectores RJ45 não possuem pinos para o CAN_V+, impossibilitando a distribuição de energia pela rede. Assim, dispositivos que dependam de alimentação pelo barramento não receberão energia por esse tipo de conexão.
 
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
