@@ -408,7 +408,7 @@ Para entender o OD, é útil consultar o *electronic data sheet* e o *device con
 **Frames e COB-IDs**
 
 Para entender a comunicação, é útil entender primeiro o frame CANopen:
-- Os identificadores (IDs) dos dispositivos vão de 0 a 127;
+- Os identificadores (IDs) dos dispositivos vão de 1 a 127;
 - 127 é um limite lógico;
 - O *transceiver* pode ser um fator limitante; 
 - Não pode haver identificadores duplicados. 
@@ -603,7 +603,8 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
     - Permitindo assim mais de 64 nós;
     - Pode fornecer isolamento entre os segmentos, senso do que cada uma desses segmentos ter os resistores de terminação;
     - É transparente, do ponto de vista da rede, pois simplesmente encaminha os sinais CAN, com os dispositivos conectados ao barramento participando da mesma arbitragem;
-    - Não permite aumentar o comprimento total do cabo. 
+    - Não permite aumentar o comprimento total do barramento. 
+    - Adiciona um atraso de propagação no barramento, e esse atraso reduz o comprimento máximo do barramento. Um atraso de 5ns leva a uma redução de 1m.
 
         ![alt text](docs/imgs/topologia_com_repetidor_redes_canopem.png)
 
@@ -661,6 +662,17 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
         - **Bitola mínima**:
 
             ![alt text](docs/imgs/tabela2_cia303.1.png)
+
+        - **Cabo vs *Bit rate***: 
+
+            O *bit rate* depende do tipo de cabo (impedância e bitola) e do seu comprimento. A estimativa da CiA 301 para tal relação é: 
+
+            ![alt text](docs/imgs/comprimento_do_caso_vs_bit_rate_canopen.png)
+
+            Obs.: A estimativa foi baseada em um atraso de propagação de 5ns/m. Os atrasos de controladores, *transceiveres* e optoacopladores precisam ser considerados.
+
+            Obs.: Em algumas documentações, frequentemente encontra-se o valor máximo de 40m para um *bit rate* de 1Mbit/s. Este dado, corresponde ao calculo realizado considerando um cabo sem isolamento elétrico.
+
 
         - **Correspondência de impedâncias**: cabos e conectores devem ter impedância compatível para evitar reflexões.
         - **Cabos *Stub* (*Drop*)**: Devem ser o mais curtos possível para evitar reflexões.
