@@ -636,11 +636,19 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
 - **Topologia com Fonte de Alimentação Externa**
 
-    Trata-se de uma variação na infraestrutura elétrica da rede para que os dispositivos recebam energia pelo próprio cabo de comunicação. Além dos dois fios de sinal do barramento CAN (`CAN_H` e `CAN_L`) e do fio de referência (`CAN_GND`), o cabo do barramento leva também linhas de alimentação (tipicamente `CAN_V+` e `CAN_V-` e usa o `CAN_GND` como retorno). O CiA 303-1 recomenda que essa tensão esteja entre +18 VDC e +30 VDC para permitir o uso de fontes padrão de 24 VDC.
-
+    Trata-se de uma variação na infraestrutura elétrica da rede para que os dispositivos recebam energia pelo próprio cabo de comunicação. Além dos dois fios de sinal do barramento CAN (`CAN_H` e `CAN_L`) e do fio de referência (`CAN_GND`), o cabo do barramento leva também linhas de alimentação (tipicamente `CAN_V+` e `CAN_V-` e usa o `CAN_GND` como retorno).
+    
     ![alt text](docs/imgs/topologia_com_alimentacao_externa_redes_canopem.png)
 
-    Obs.: Repetidores, *bridges*, cabos RJ45 não encaminham o sinal de alimentação `CAN_V+`.
+    - A CiA 303-1 recomenda que essa tensão esteja entre +18 VDC e +30 VDC para permitir o uso de fontes padrão de 24 VDC.
+
+    - A soma das correntes consumidas pelos dispositivos alimentados por uma fonte não deve exceder 1500mA. 
+
+    - Repetidores, *bridges*, cabos RJ45 não encaminham o sinal de alimentação `CAN_V+`.
+    
+    - O Comprimento do cabo está relacionado a queda de tenção no mesmo, de tal forma que a corrente será limitada dado a seguinte relação:
+
+        ![alt text](docs/imgs/comprimento_do_caso_vs_corrente.png)
 
 **Sistema de Cabeamento** ([CiA 303-1](docs/cia303.1-v2.0.1_device_and_network_design-part1_canopen_physical_layer.pdf))
 
