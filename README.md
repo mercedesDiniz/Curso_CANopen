@@ -715,7 +715,7 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 - **Dicas básicas**:
     - Documente o projeto da rede com os cálculos associados;
     - Atribuir a cada nó um endereço exclusivo;
-    - Certifique-se que os nós de uma mesma rede tenham a mesma velocidade de transmissão;
+    - Certifique-se que os nós de um mesmo segmento de rede tenham a mesma velocidade de transmissão;
     - Verificar se o comprimento e a seção transversal dos cabos estão de acordo com a norma;
     - Verificar se todos os segmentos têm resistores de terminação em suas extremidades.
 
@@ -746,4 +746,52 @@ Para minimizar distúrbios de modo comum e garantir alta imunidade a interferên
 
     - Conectores RJ45 não possuem pinos para o CAN_V+, impossibilitando a distribuição de energia pela rede. Assim, dispositivos que dependam de alimentação pelo barramento não receberão energia por esse tipo de conexão.
 
+- **Verificações e Soluções de Problemas**
+
+    - **Teste das Resistências de Terminação**: O objetivo é medir a resistência total das duas linhas de dados CAN e os resistores de terminação conectados.
+
+        1. Desligue as tensões de alimentação de todos os nós.
+        2. Meça a resistência entre o `CAN_H` e o `CAN_L` em uma das extremidades da rede (ponto de medição 1): 
+            
+            ![alt text](docs/imgs/teste_resitores_terminacao.png)
+
+            - Resultado esperado: Obter um valor entre 50 $\Omega$ a 70 $\Omega$.
+            - Se o valor for inferior a 50 $\Omega$, certifique-se de que:
+                - Não há curti-circuito entre o `CAN_H` e o `CAN_L`;
+                - Não há mais do que dois resistores de terminação;
+                - Os *transceiveres* dos nós não estão com defeito.
+            - Se o valor for superior a 70 $\Omega$, certifique-se de que:
+                - Todas as linhas `CAN_H` e `CAN_L` estão conectados corretamente;
+                - Os dois resistores de terminação de 120 $\Omega$ estão conectados.  
+
+    - **Teste do nível de Tensão da fiação do CAN**: Cada nó possui um *transceiver* que gera os sinais diferenciais nas linhas de dados. Quando a comunicação está ociosa, as tensões `CAN_H` e `CAN_L` são cerca de 2,5V (entre 2V e 3V) para o `CAN_GND`, mas *transceiveres* defeituosos podem alterar essa tensão e interromper a comunicação da rede.
+
+        1. Ligue todas as tensão de alimentação;
+        2. Encerre todas as comunicações da rede;
+        3. Meça a tensão entre o `CAN_H` e o `CAN_GND`(ponto de medição 2);
+        4. Meça a tensão entre o `CAN_L` e o `CAN_GND`(ponto de medição 3).
+
+    - **Teste de resistência dos *Transceiveres***: Dados elétricos podem aumentar a corrente de fuga nos *transceiveres*, e para medir essa corrente usa-se um *ohmímetro* da seguinte forma:
+
+        1. Desligue as tensões de alimentação do *transceiver*.
+        2. Meça a resistência entre o `CAN_H` e o `CAN_GND` (ponto de medição 5).
+        3. Meça a resistência entre o `CAN_L` e o `CAN_GND` (ponto de medição 6).
+
+            ![alt text](docs/imgs/teste_resistencia_transceiveres.png)
+
+            - Resultado esperado: Os valores de cada uma das resistências devem ser superior a 10k $\Omega$.
+            - Se o valor for significativamente menor ou houver um desvio muito alto (>>200%), o *transceiver* pode está com defeito.
+
+    - **Teste de Aterramento**: O objetivo é verificar se o `CAN_GND` está aterrado em um apenas um ponto. Este teste só pode ser realizado com nó eletricamente isolados.
+    
+        1. Desconecte a `CAN_GND` do potencial de terra (FE).
+        2. Meça a resistência entre o `CAN_GND` e o potencial terra (FE): 
+            
+            ![alt text](docs/imgs/teste_de_aterramento.png)
+        
+            - Resultado esperado: Valor da resistência maior que 1M $\Omega$.
+            - Se o valor for menor, é por que existi outro ponto de aterramento que precisa ser desconectado. 
+
+    - **Teste de Curto-Circuito na fiação do CAN**: Um barramento CAN ainda pode transmitir dados mesmo se o `CAN_GND` e o `CAN_L` estiverem em curto-circuito. No entanto, isso geralmente fará com que a taxa de erro aumente acentuadamente.
+    
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
