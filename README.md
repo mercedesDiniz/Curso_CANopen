@@ -646,7 +646,7 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
 - **Elementos**
     - ***Bus Cable***: Cabo de barramento terminado em ambas as extremidades por resistores de terminação.
-    - ***Stub Cable***: Ramal curto conectado ao cabo de barramento, não terminado por resistor, que liga o dispositivo CANopen ao barramento.
+    - ***Stub/Drop Cable***: Ramal curto conectado ao cabo de barramento, não terminado por resistor, que liga o dispositivo CANopen ao barramento.
     - ***T-connector***: Conector elétrico em formato de “T”, com três pontos de conexão, usado para ligar o cabo de barramento a um dispositivo ou a um *stub cable*.
     - ***Trunk Cable***: Espinha dorsal do cabo de barramento, sem ramais (*stub cables*), que interliga os dispositivos ao longo da rede.
 
@@ -673,12 +673,25 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
             Obs.: Em algumas documentações, frequentemente encontra-se o valor máximo de 40m para um *bit rate* de 1Mbit/s. Este dado, corresponde ao calculo realizado considerando um cabo sem isolamento elétrico.
 
-
         - **Correspondência de impedâncias**: cabos e conectores devem ter impedância compatível para evitar reflexões.
         - **Cabos *Stub* (*Drop*)**: Devem ser o mais curtos possível para evitar reflexões.
             - Cumprir fórmulas do CiA para calcular comprimento máximo de stub em função da taxa de bits: $l_u < \frac{t_{\mathrm{PROPSEG}}}{50 \cdot t_p}$
 
             - A soma de todos os stubs também é limitada por: $\sum_{i=1}^{n} l_{u_i} < \frac{t_{\mathrm{PROPSEG}}}{10 \cdot t_p}$
+    
+    - **Comprimento Máximo dos *Stub/Drop Cable***:
+
+        ![alt text](docs/imgs/comprimento_max_cabo_drop.png)
+        
+        Sendo:
+        - $Lmax$: comprimento máximo de um cabo drop.
+        - $\sum Lmax$: valormáximo da soma dos cabos drop de um mesmo TAP.
+        - $TAP_{distance}$: distancia mínima necessária entre dois TAPs (deve ser $>$ 60% do maior dos dois $\sum Lmax$).
+        - $\sum LGmax$: valor máximo da soma dos cabos drop na rede.
+
+        **Exemplo do calculo**:
+
+        ![alt text](docs/imgs/exemplo_calculo_comprimento_drop.png)
 
     - **Conectores**:
         - Usar conectores cuja resistência de transmissão seja entre 2,5 mΩ e 10 mΩ.
