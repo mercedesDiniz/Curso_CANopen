@@ -706,6 +706,23 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
         - Plug (macho) não deve ser alimentado; tomada (fêmea) pode ser alimentada.
         - Seguir [CiA 106](docs/cia106-v1.1_connector_pin_assignmente_recommendations.pdf) para pinagem padronizada de conectores.
 
+        - **Opções de Conectores**:
+            - **D-SUB 9-pin**
+            
+                ![alt text](docs/imgs/conector_D-SUB9.png)
+
+            - **RJ45**
+
+                ![alt text](docs/imgs/conector_RJ45.png)
+
+            - ***Open Style***
+
+                ![alt text](docs/imgs/conector_open_style.png)
+
+            - **IP67 M12**
+
+                ![alt text](docs/imgs/conector_M12-5pin.png)
+
     - **Resistores de Terminação**:
         - Valor nominal 120 Ω ± (mínimo aceitável: 118 Ω).
         - Devem estar apenas nas duas extremidades físicas do barramento.
@@ -744,7 +761,7 @@ Para minimizar distúrbios de modo comum e garantir alta imunidade a interferên
 
     - Caso seja necessário distribuir a rede CANopen entre gabinetes distintos, deve-se utilizar cabos CANopen padrão para fazer essa interligação.
 
-    - Conectores RJ45 não possuem pinos para o CAN_V+, impossibilitando a distribuição de energia pela rede. Assim, dispositivos que dependam de alimentação pelo barramento não receberão energia por esse tipo de conexão.
+    - Conectores RJ45 não possuem pinos para o CAN_V+, impossibilitando a distribuição de energia pela rede. Assim, dispositivos que dependam de alimentação pelo barramento não receberão energia por esse tipo de conexão. 
 
 - **Verificações e Soluções de Problemas**
 
