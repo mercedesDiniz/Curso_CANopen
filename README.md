@@ -595,6 +595,10 @@ Além do objeto de comunicação HEARTBEAT, os seguintes protocolos também perm
 
     Obs.: Não pode haver o cascateamento de TAPs.
 
+    - **Exemplo de TAPs**:
+
+        ![alt text](docs/imgs/exemplo_de_tap.png)
+
 - **Topologia com Repetidor**
 
     A rede CANopem pode ser composta por um ou vários segmentos, interligados fisicamente através de um repetidor CAN. Ele recebe os sinais de um lado, recondiciona (restaura níveis de tensão, forma de onda e temporização) e retransmite para o outro lado.
