@@ -814,5 +814,33 @@ Para minimizar distúrbios de modo comum e garantir alta imunidade a interferên
             - Se o valor for menor, é por que existi outro ponto de aterramento que precisa ser desconectado. 
 
     - **Teste de Curto-Circuito na fiação do CAN**: Um barramento CAN ainda pode transmitir dados mesmo se o `CAN_GND` e o `CAN_L` estiverem em curto-circuito. No entanto, isso geralmente fará com que a taxa de erro aumente acentuadamente.
-    
+
+-  **Endereçamento dos Dispositivos**
+
+    Até aqui aprendemos que cada dispositivo deve ter um endereço único, a faixa de endereços vai de 1 a 127 e a quantidade de dispositivos vai depender do *tranceiver* utilizado, sendo que normalmente temos redes com até 63 dispositivos podendo se estender se houver um repetidor.
+
+    Geralmente temos três maneira de atribuir um endereço a um dispositivo na rede CANopen:
+
+    - **Via software de configuração**
+
+    - **Utilizando chaves *Dip switch***
+        
+        Exemplo: BKS120 da Beckhoff
+
+        ![alt text](docs/imgs/dip_switch.png)
+
+        - O ID do nó é definido com as chaves *dip* 1-6, podendo ser atribuído valores de 1 a 63. 
+
+        - O *baud rate* do dispositivo é definido através das chaves *dip* 7-8*.
+
+    - **Utilizando chaves rotativas**
+
+        Exemplo: RUW-01 da WEG
+
+        ![alt text](docs/imgs/chave_rotativa.png)
+
+        - O ID do nó é definido através de duas chaves hexadecimais (S1 e S2), podendo ser atribuído valores de 1 a 127 (01 a 7F). 
+
+        - O *baud rate* do dispositivo é definido através de uma chaves hexadecimal (S3), podendo ser atribuído valores de 0 (1Mbit/s) a 8 (10Kbit/s).  
+
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
