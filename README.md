@@ -844,3 +844,14 @@ Para minimizar distúrbios de modo comum e garantir alta imunidade a interferên
         - O *baud rate* do dispositivo é definido através de uma chaves hexadecimal (S3), podendo ser atribuído valores de 0 (1Mbit/s) a 8 (10Kbit/s).  
 
 ### 4. [CANopen na Prática](#4-canopen-na-pratica)
+
+1. **Prática 01 (s5a55)**
+
+    - **Materiais**:
+        - 1 x PAC da Schneider da linha Modicon M340 com CPU BMX P34 2010;
+        - 1 x Inversor de frequência [Altivar 31](docs/atv31_manual_do_usuario.pdf).
+
+    - **Método**:
+        - Conexão sugerida:
+
+            ![alt text](image.png)
